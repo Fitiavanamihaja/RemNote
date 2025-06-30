@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RemNote - Prenez des notes facilement</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      length;
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#4F46E5", secondary: "#10B981" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="shortcut icon" href="public/remnoteicon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body class="bg-white min-h-screen">
+    <header class="w-full bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
+      <div
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <div class="flex items-center">
+          <h1 class="text-2xl font-['Pacifico'] text-primary">RemN</h1>
+        </div>
+        <div class="flex items-center space-x-6">
+          <label class="theme-switch">
+            <input type="checkbox" id="themeToggle" />
+            <span class="slider"></span>
+          </label>
+          <a
+            href="#"
+            class="text-gray-600 hover:text-primary transition-colors"
+            id="loginBtn"
+            >Se connecter</a
+          >
+          <a
+            href="#"
+            class="bg-primary text-white px-4 py-2 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap"
+            id="signupBtn"
+            >S'inscrire</a
+          >
+        </div>
+      </div>
+    </header>
+    <main>
+      <!-- Landing Page -->
+      <section id="landingPage">
+        <div
+          class="hero-bg w-full h-screen flex items-center justify-center bg-gradient-to-r from-white to-transparent relative overflow-hidden"
+        >
+          <div class="container mx-auto p-4">
+            <div
+              class="max-w-7xl m-auto flex flex-col md:flex-row items-center gap-12"
+            >
+              <div class="w-full md:w-1/2 z-10">
+                <span
+                  class="inline-block bg-primary bg-opacity-10 text-primary px-4 py-2 !rounded-full text-sm font-medium mb-6"
+                  >✨ La meilleure app de notes</span
+                >
+                <h1
+                  class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+                >
+                  Capturez vos idées,
+                  <span class="text-primary">instantanément</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                  Une application simple et élégante pour organiser vos pensées,
+                  idées et tâches. Prenez des notes avec style et retrouvez-les
+                  facilement.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <button
+                    class="bg-primary text-white px-8 py-4 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap text-lg font-medium flex items-center"
+                  >
+                    Commencer maintenant
+                    <i class="ri-arrow-right-line ml-2"></i>
+                  </button>
+                  <button
+                    class="border-2 border-gray-200 text-gray-700 px-8 py-4 !rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-lg font-medium"
+                  >
+                    En savoir plus
+                  </button>
+                </div>
+                <div class="mt-12 flex items-center gap-8">
+                  <div class="flex -space-x-4">
+                    <img
+                      src="public/user1.jpg"
+                      class="w-12 h-12 !rounded-full border-2 border-white"
+                      alt="User"
+                    />
+                    <img
+                      src="public/user2.jpg"
+                      class="w-12 h-12 !rounded-full border-2 border-white"
+                      alt="User"
+                    />
+                    <img
+                      src="public/user3.jpg"
+                      class="w-12 h-12 !rounded-full border-2 border-white"
+                      alt="User"
+                    />
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1 text-primary">
+                      <i class="ri-star-fill"></i>
+                      <i class="ri-star-fill"></i>
+                      <i class="ri-star-fill"></i>
+                      <i class="ri-star-fill"></i>
+                      <i class="ri-star-fill"></i>
+                    </div>
+                    <p class="text-gray-600 text-sm mt-1">
+                      Plus de 10,000 utilisateurs satisfaits
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="w-full md:w-1/2 relative">
+                <div
+                  class="absolute -bottom-8 -right-8 bg-white p-6 !rounded-2xl shadow-lg max-w-xs"
+                >
+                  <div class="flex items-center gap-4 mb-4">
+                    <div
+                      class="w-12 h-12 bg-primary bg-opacity-10 !rounded-full flex items-center justify-center"
+                    >
+                      <i class="ri-flashlight-line ri-2x"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-gray-900">
+                        Interface intuitive
+                      </h3>
+                      <p class="text-sm text-gray-600">Simple et efficace</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container mx-auto px-4 py-24">
+          <div class="text-center mb-20">
+            <span
+              class="inline-block bg-primary bg-opacity-10 text-primary px-4 py-2 !rounded-full text-sm font-medium mb-6"
+              >Fonctionnalités</span
+            >
+            <h2 class="text-4xl font-bold text-gray-900 mb-6">
+              Tout ce dont vous avez besoin
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              Découvrez comment RemNote peut transformer votre façon de prendre
+              et d'organiser vos notes.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+            >
+              <div
+                class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
+              >
+                <i
+                  class="ri-markdown-line ri-2x text-primary group-hover:text-white"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Markdown intégré
+              </h3>
+              <p class="text-gray-600 leading-relaxed">
+                Formatez vos notes avec du texte en gras, italique, des listes
+                et plus encore grâce au support Markdown.
+              </p>
+            </div>
+            <div
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+            >
+              <div
+                class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
+              >
+                <i
+                  class="ri-price-tag-3-line ri-2x text-primary group-hover:text-white"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Organisation par tags
+              </h3>
+              <p class="text-gray-600">
+                Classez vos notes avec des tags personnalisés pour les retrouver
+                rapidement quand vous en avez besoin.
+              </p>
+            </div>
+            <div
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+            >
+              <div
+                class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
+              >
+                <i
+                  class="ri-layout-2-line ri-2x text-primary group-hover:text-white"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Mode double affichage
+              </h3>
+              <p class="text-gray-600">
+                Comparez ou travaillez sur deux notes simultanément grâce à
+                notre interface flexible.
+              </p>
+            </div>
+            <div
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+            >
+              <div
+                class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
+              >
+                <i
+                  class="ri-search-line ri-2x text-primary group-hover:text-white"
+                ></i>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                Recherche avancée
+              </h3>
+              <p class="text-gray-600">
+                Retrouvez instantanément n'importe quelle note grâce à notre
+                moteur de recherche puissant.
+              </p>
+            </div>
+          </div>
+          <section>
+            <div class="bg-gradient-to-b from-white to-gray-50 py-32">
+              <div class="container mx-auto px-4">
+                <div class="max-w-4xl mx-auto text-center">
+                  <span
+                    class="inline-block bg-primary bg-opacity-10 text-primary px-4 py-2 !rounded-full text-sm font-medium mb-6"
+                    >Commencez maintenant</span
+                  >
+                  <h2
+                    class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight"
+                  >
+                    Prêt à organiser vos idées ?
+                  </h2>
+                  <p class="text-xl text-gray-600 mb-12 leading-relaxed">
+                    Rejoignez plus de 10,000 utilisateurs qui améliorent leur
+                    productivité avec RemNote. Commencez gratuitement dès
+                    aujourd'hui !
+                  </p>
+                  <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button
+                      class="bg-primary text-white px-8 py-4 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap text-lg font-medium flex items-center justify-center"
+                    >
+                      Créer un compte gratuit
+                      <i class="ri-arrow-right-line ml-2"></i>
+                    </button>
+                    <button
+                      id="demoButton"
+                      class="border-2 border-gray-200 text-gray-700 px-8 py-4 !rounded-button hover:bg-gray-50 transition-colors whitespace-nowrap text-lg font-medium"
+                    >
+                      Voir la démo
+                    </button>
+
+                    <div
+                      id="demoModal"
+                      class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center"
+                    >
+                      <div
+                        class="bg-white !rounded-2xl max-w-4xl w-full mx-4 overflow-hidden"
+                      >
+                        <div
+                          class="p-6 flex justify-between items-center border-b"
+                        >
+                          <h3 class="text-2xl font-semibold text-gray-900">
+                            Découvrez RemNote en action
+                          </h3>
+                          <button
+                            id="closeDemo"
+                            class="text-gray-500 hover:text-gray-700"
+                          >
+                            <i
+                              class="ri-close-line ri-2x text-primary group-hover:text-white"
+                            ></i>
+                          </button>
+                        </div>
+                        <div class="p-6">
+                          <div
+                            class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8"
+                          >
+                            <div>
+                              <img
+                                src="https://readdy.ai/api/search-image?query=clean%20and%20modern%20note%20taking%20app%20interface%20with%20markdown%20editor%2C%20showing%20text%20formatting%20options%20and%20a%20sidebar%20with%20organized%20tags%2C%20professional%20UI%20design%20with%20light%20theme&width=600&height=400&seq=demo1&orientation=landscape"
+                                class="w-full !rounded-lg shadow-lg mb-4"
+                                alt="Markdown Editor Demo"
+                              />
+                              <h4
+                                class="text-lg font-semibold text-gray-900 mb-2"
+                              >
+                                Éditeur Markdown intuitif
+                              </h4>
+                              <p class="text-gray-600">
+                                Formatez vos notes facilement avec notre éditeur
+                                Markdown intégré. Texte en gras, listes, liens -
+                                tout est possible.
+                              </p>
+                            </div>
+                            <div>
+                              <img
+                                src="https://readdy.ai/api/search-image?query=note%20organization%20system%20with%20colorful%20tags%20and%20categories%2C%20showing%20a%20clean%20search%20interface%20and%20filtered%20results%2C%20professional%20UI%20design%20with%20light%20theme&width=600&height=400&seq=demo2&orientation=landscape"
+                                class="w-full !rounded-lg shadow-lg mb-4"
+                                alt="Tags Organization Demo"
+                              />
+                              <h4
+                                class="text-lg font-semibold text-gray-900 mb-2"
+                              >
+                                Organisation intelligente
+                              </h4>
+                              <p class="text-gray-600">
+                                Classez vos notes avec des tags personnalisés et
+                                retrouvez-les instantanément grâce à notre
+                                recherche avancée.
+                              </p>
+                            </div>
+                          </div>
+                          <div class="text-center">
+                            <button
+                              id="demoSignupBtn"
+                              class="bg-primary text-white px-8 py-4 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap text-lg font-medium inline-flex items-center"
+                            >
+                              Essayer gratuitement
+                              <i class="ri-arrow-right-line ml-2"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <footer class="bg-gray-900 text-white py-12">
+          <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div>
+                <h3 class="text-xl font-['Pacifico'] text-white mb-4">RemN</h3>
+                <p class="text-gray-400">
+                  Simplifiez votre vie numérique avec notre application de prise
+                  de notes intuitive et puissante.
+                </p>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-4">Liens rapides</h4>
+                <ul class="space-y-2">
+                  <li>
+                    <a
+                      href="#"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >Accueil</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >Fonctionnalités</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >Tarifs</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >FAQ</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-4">Légal</h4>
+                <ul class="space-y-2">
+                  <li>
+                    <a
+                      href="#"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >Conditions d'utilisation</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >Politique de confidentialité</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >Mentions légales</a
+                    >
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                <ul class="space-y-2">
+                  <li class="flex items-center">
+                    <i class="ri-mail-line mr-2"></i>
+                    <a
+                      href="mailto:contact@RemNote.fr"
+                      class="text-gray-400 hover:text-white transition-colors"
+                      >contact@RemNote.fr</a
+                    >
+                  </li>
+                  <li class="flex items-center">
+                    <i class="ri-customer-service-2-line mr-2"></i>
+                    <span class="text-gray-400">Support 7j/7</span>
+                  </li>
+                </ul>
+                <div class="flex space-x-4 mt-4">
+                  <a
+                    href="#"
+                    class="text-gray-400 hover:text-white transition-colors"
+                  >
+                    <i class="ri-twitter-x-line ri-lg"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-gray-400 hover:text-white transition-colors"
+                  >
+                    <i class="ri-facebook-circle-line ri-lg"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-gray-400 hover:text-white transition-colors"
+                  >
+                    <i class="ri-instagram-line ri-lg"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-gray-400 hover:text-white transition-colors"
+                  >
+                    <i class="ri-linkedin-box-line ri-lg"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+              <p class="text-gray-500">© 2025 RemNote. Tous droits réservés.</p>
+            </div>
+          </div>
+        </footer>
+      </section>
+      <!-- Login Page -->
+      <section
+        id="loginPage"
+        class="hidden pt-24 min-h-screen flex items-center justify-center bg-gray-50"
+      ></section>
+      <!-- Signup Page -->
+      <section
+        id="signupPage"
+        class="hidden pt-24 min-h-screen flex items-center justify-center bg-gray-50"
+      ></section>
+    </main>
+
+    <script type="module" src="js/formValidation.js"></script>
+    <script type="module" src="js/navigation.js"></script>
+    <script type="module" src="js/themeToggle.js"></script>
+    <script type="module" src="js/customCheckbox.js"></script>
+    <script type="module" src="js/demoModal.js"></script>
+  </body>
+</html>

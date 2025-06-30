@@ -1,0 +1,179 @@
+:where([class^="ri-"])::before {
+    content: "\f3c2";
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.markdown-preview h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-preview h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-preview p {
+    margin-bottom: 0.5rem;
+}
+
+.markdown-preview strong {
+    font-weight: 700;
+}
+
+.markdown-preview em {
+    font-style: italic;
+}
+
+.markdown-preview ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-preview ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-preview blockquote {
+    border-left: 4px solid #e5e7eb;
+    padding-left: 1rem;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.markdown-preview code {
+    font-family: monospace;
+    background-color: #f3f4f6;
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.25rem;
+}
+
+.markdown-preview pre {
+    background-color: #f3f4f6;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin-bottom: 0.5rem;
+}
+
+.dark .markdown-preview code {
+    background-color: #374151;
+}
+
+.dark .markdown-preview pre {
+    background-color: #1f2937;
+}
+
+.dark .markdown-preview blockquote {
+    border-left-color: #4b5563;
+}
+
+/* Masquer les flèches des input number */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Switch personnalisé */
+.switch-input {
+    display: none;
+}
+
+.switch-label {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+    background-color: #e5e7eb;
+    border-radius: 13px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.switch-label:after {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: white;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.switch-input:checked+.switch-label {
+    background-color: #4F46E5;
+}
+
+.switch-input:checked+.switch-label:after {
+    left: calc(100% - 24px);
+}
+
+/* Animation pour les toasts */
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+.toast-enter {
+    animation: slideIn 0.3s forwards;
+}
+
+.toast-exit {
+    animation: slideOut 0.3s forwards;
+}
+
+/* Transition pour les modals */
+.modal-overlay {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+}
+
+.modal-container {
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.modal-container.active {
+    transform: scale(1);
+    opacity: 1;
+}

@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carnet de Notes</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#4F46E5", secondary: "#8B5CF6" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="shortcut icon" href="public/remnoteicon.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
+    />
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body
+    class="bg-gray-50 text-gray-900 transition-colors duration-300"
+    id="app-body"
+  >
+    <div class="flex h-screen overflow-hidden">
+      <!-- Sidebar -->
+      <aside
+        class="w-64 bg-white border-r border-gray-200 flex flex-col transition-colors duration-300"
+        id="sidebar"
+      >
+        <div class="p-4 border-b border-gray-200">
+          <h1 class="font-['Pacifico'] text-2xl text-primary">RemNote</h1>
+        </div>
+        <div class="p-4">
+          <button
+            id="new-note-btn"
+            class="w-full bg-primary hover:bg-primary/90 text-white py-2 px-4 !rounded-button flex items-center justify-center gap-2 whitespace-nowrap"
+          >
+            <div class="w-5 h-5 flex items-center justify-center">
+              <i class="ri-add-line"></i>
+            </div>
+            <span>Nouvelle note</span>
+          </button>
+        </div>
+        <div class="p-4 border-b border-gray-200">
+          <div class="relative">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none w-5 h-5"
+            >
+              <i class="ri-search-line text-gray-400"></i>
+            </div>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Rechercher..."
+              class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+            />
+          </div>
+        </div>
+        <div class="p-4 border-b border-gray-200">
+          <h2
+            class="font-medium text-sm uppercase tracking-wider text-gray-500 mb-2"
+          >
+            Trier par
+          </h2>
+          <div class="flex flex-col gap-2">
+            <button
+              id="sort-date-desc"
+              class="text-left px-3 py-2 text-sm !rounded-button hover:bg-gray-100 flex items-center gap-2 whitespace-nowrap"
+            >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-calendar-line"></i>
+              </div>
+              <span>Date (récent)</span>
+            </button>
+            <button
+              id="sort-date-asc"
+              class="text-left px-3 py-2 text-sm !rounded-button hover:bg-gray-100 flex items-center gap-2 whitespace-nowrap"
+            >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-calendar-line"></i>
+              </div>
+              <span>Date (ancien)</span>
+            </button>
+            <button
+              id="sort-alpha"
+              class="text-left px-3 py-2 text-sm !rounded-button hover:bg-gray-100 flex items-center gap-2 whitespace-nowrap"
+            >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-sort-alpha-asc-line"></i>
+              </div>
+              <span>Alphabétique</span>
+            </button>
+          </div>
+        </div>
+        <div class="p-4 border-b border-gray-200 flex-grow overflow-auto">
+          <h2
+            class="font-medium text-sm uppercase tracking-wider text-gray-500 mb-2"
+          >
+            Tags
+          </h2>
+          <div id="tags-list" class="flex flex-wrap gap-2">
+            <!-- Tags will be dynamically added here -->
+          </div>
+        </div>
+        <div class="p-4 border-t border-gray-200 mt-auto">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium">Mode sombre</span>
+            <label class="switch-label">
+              <input type="checkbox" id="theme-toggle" class="switch-input" />
+              <span class="switch-label"></span>
+            </label>
+          </div>
+          <button
+            id="split-view-toggle"
+            class="mt-4 w-full border border-gray-300 py-2 px-4 !rounded-button flex items-center justify-center gap-2 hover:bg-gray-100 whitespace-nowrap"
+          >
+            <div class="w-5 h-5 flex items-center justify-center">
+              <i class="ri-layout-column-line"></i>
+            </div>
+            <span>Mode double affichage</span>
+          </button>
+        </div>
+      </aside>
+      <!-- Main Content -->
+      <main
+        class="flex-1 flex flex-col h-full overflow-hidden bg-gray-50 transition-colors duration-300"
+        id="main-content"
+      >
+        <!-- Notes List View -->
+        <div id="notes-container" class="flex-1 p-6 overflow-auto">
+          <div class="mb-6">
+            <h2 class="text-2xl font-semibold">Mes Notes</h2>
+            <p class="text-gray-500"><span id="notes-count">0</span> notes</p>
+          </div>
+          <div
+            id="notes-grid"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <!-- Notes will be dynamically added here -->
+          </div>
+          <div
+            id="empty-state"
+            class="flex flex-col items-center justify-center py-12"
+          >
+            <div
+              class="w-16 h-16 flex items-center justify-center text-gray-400 mb-4"
+            >
+              <i class="ri-sticky-note-line ri-3x"></i>
+            </div>
+            <h3 class="text-xl font-medium text-gray-700 mb-2">Aucune note</h3>
+            <p class="text-gray-500 text-center max-w-md mb-6">
+              Commencez par créer une nouvelle note en cliquant sur le bouton
+              "Nouvelle note".
+            </p>
+            <button
+              id="empty-new-note-btn"
+              class="bg-primary hover:bg-primary/90 text-white py-2 px-6 !rounded-button flex items-center gap-2 whitespace-nowrap"
+            >
+              <div class="w-5 h-5 flex items-center justify-center">
+                <i class="ri-add-line"></i>
+              </div>
+              <span>Nouvelle note</span>
+            </button>
+          </div>
+        </div>
+        <!-- Note Editor View (Hidden by default) -->
+        <div id="view-container" class="hidden flex-1 p-6 overflow-auto">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-semibold" id="view-title"></h2>
+              <p class="text-gray-500" id="view-date"></p>
+            </div>
+            <div class="flex gap-2">
+              <button
+                id="edit-note-btn"
+                class="bg-primary hover:bg-primary/90 text-white py-2 px-4 !rounded-button whitespace-nowrap"
+              >
+                Modifier
+              </button>
+            </div>
+          </div>
+          <div
+            class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6"
+          >
+            <div id="view-tags" class="flex flex-wrap gap-2 mb-4"></div>
+            <div
+              id="view-content"
+              class="markdown-preview prose max-w-none"
+            ></div>
+          </div>
+        </div>
+        <div id="editor-container" class="hidden flex-1 p-6 overflow-auto">
+          <div class="mb-6 flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-semibold" id="editor-title-display">
+                Nouvelle note
+              </h2>
+              <p class="text-gray-500" id="editor-date-display"></p>
+            </div>
+            <div class="flex gap-2">
+              <button
+                id="cancel-edit-btn"
+                class="border border-gray-300 py-2 px-4 !rounded-button hover:bg-gray-100 whitespace-nowrap"
+              >
+                Annuler
+              </button>
+              <button
+                id="save-note-btn"
+                class="bg-primary hover:bg-primary/90 text-white py-2 px-4 !rounded-button whitespace-nowrap"
+              >
+                Enregistrer
+              </button>
+            </div>
+          </div>
+          <div
+            class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6"
+          >
+            <div class="mb-4">
+              <label
+                for="note-title"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Titre</label
+              >
+              <input
+                type="text"
+                id="note-title"
+                class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Titre de la note"
+              />
+            </div>
+            <div class="mb-4">
+              <label
+                for="note-content"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Contenu</label
+              >
+              <div class="border border-gray-300 rounded overflow-hidden">
+                <div
+                  class="flex items-center bg-gray-50 px-3 py-2 border-b border-gray-300 text-sm"
+                >
+                  <button
+                    id="format-bold"
+                    class="p-1 hover:bg-gray-200 rounded mr-1 !rounded-button whitespace-nowrap"
+                  >
+                    <div class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-bold"></i>
+                    </div>
+                  </button>
+                  <button
+                    id="format-italic"
+                    class="p-1 hover:bg-gray-200 rounded mr-1 !rounded-button whitespace-nowrap"
+                  >
+                    <div class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-italic"></i>
+                    </div>
+                  </button>
+                  <button
+                    id="format-heading"
+                    class="p-1 hover:bg-gray-200 rounded mr-1 !rounded-button whitespace-nowrap"
+                  >
+                    <div class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-heading"></i>
+                    </div>
+                  </button>
+                  <button
+                    id="format-list"
+                    class="p-1 hover:bg-gray-200 rounded mr-1 !rounded-button whitespace-nowrap"
+                  >
+                    <div class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-list-unordered"></i>
+                    </div>
+                  </button>
+                  <button
+                    id="format-quote"
+                    class="p-1 hover:bg-gray-200 rounded !rounded-button whitespace-nowrap"
+                  >
+                    <div class="w-5 h-5 flex items-center justify-center">
+                      <i class="ri-double-quotes-l"></i>
+                    </div>
+                  </button>
+                </div>
+                <textarea
+                  id="note-content"
+                  class="w-full px-3 py-2 min-h-[200px] focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Contenu de la note (supporte le Markdown)"
+                ></textarea>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label
+                for="note-tags"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Tags</label
+              >
+              <div class="flex items-center">
+                <div class="relative flex-1">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none w-5 h-5"
+                  >
+                    <i class="ri-hashtag text-gray-400"></i>
+                  </div>
+                  <input
+                    type="text"
+                    id="note-tags"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Ajouter des tags (séparés par des espaces)"
+                  />
+                </div>
+                <button
+                  id="add-tag-btn"
+                  class="ml-2 bg-gray-100 hover:bg-gray-200 py-2 px-4 !rounded-button whitespace-nowrap"
+                >
+                  Ajouter
+                </button>
+              </div>
+              <div id="note-tags-container" class="flex flex-wrap gap-2 mt-2">
+                <!-- Tags will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h3 class="text-lg font-medium mb-4">Aperçu Markdown</h3>
+            <div
+              id="markdown-preview"
+              class="markdown-preview prose max-w-none"
+            >
+              <!-- Markdown preview will be shown here -->
+            </div>
+          </div>
+        </div>
+        <!-- Split View (Hidden by default) -->
+        <div id="split-view-container" class="hidden flex-1 overflow-hidden">
+          <div class="flex h-full">
+            <div
+              class="w-1/2 border-r border-gray-200 p-6 overflow-auto"
+              id="split-view-left"
+            >
+              <div class="mb-4">
+                <h3 class="text-lg font-medium" id="split-left-title">
+                  Sélectionnez une note
+                </h3>
+                <p class="text-sm text-gray-500" id="split-left-date"></p>
+              </div>
+              <div
+                id="split-left-content"
+                class="markdown-preview prose max-w-none"
+              >
+                <!-- Content will be dynamically added here -->
+              </div>
+            </div>
+            <div class="w-1/2 p-6 overflow-auto" id="split-view-right">
+              <div class="mb-4">
+                <h3 class="text-lg font-medium" id="split-right-title">
+                  Sélectionnez une note
+                </h3>
+                <p class="text-sm text-gray-500" id="split-right-date"></p>
+              </div>
+              <div
+                id="split-right-content"
+                class="markdown-preview prose max-w-none"
+              >
+                <!-- Content will be dynamically added here -->
+              </div>
+            </div>
+          </div>
+          <div class="absolute bottom-6 right-6">
+            <button
+              id="exit-split-view"
+              class="bg-white border border-gray-300 shadow-sm py-2 px-4 !rounded-button hover:bg-gray-100 whitespace-nowrap"
+            >
+              Quitter le mode double affichage
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+    <!-- Confirmation Modal -->
+    <div
+      id="delete-modal"
+      class="fixed inset-0 z-50 flex items-center justify-center hidden"
+    >
+      <div class="modal-overlay absolute inset-0 bg-black bg-opacity-50"></div>
+      <div
+        class="modal-container bg-white w-96 rounded-lg shadow-lg z-50 overflow-hidden"
+      >
+        <div class="p-6">
+          <h3 class="text-lg font-medium mb-2">Confirmer la suppression</h3>
+          <p class="text-gray-600 mb-6">
+            Êtes-vous sûr de vouloir supprimer cette note ? Cette action est
+            irréversible.
+          </p>
+          <div class="flex justify-end gap-2">
+            <button
+              id="cancel-delete"
+              class="border border-gray-300 py-2 px-4 !rounded-button hover:bg-gray-100 whitespace-nowrap"
+            >
+              Annuler
+            </button>
+            <button
+              id="confirm-delete"
+              class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 !rounded-button whitespace-nowrap"
+            >
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Toast Notification -->
+    <div
+      id="toast"
+      class="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-3 rounded-lg shadow-lg hidden"
+    >
+      <div class="flex items-center">
+        <div class="w-5 h-5 flex items-center justify-center mr-2">
+          <i id="toast-icon" class="ri-check-line"></i>
+        </div>
+        <span id="toast-message">Note enregistrée avec succès</span>
+      </div>
+    </div>
+    <script id="data-management">
+      document.addEventListener("DOMContentLoaded", function () {
+        // Data management
+        let notes = JSON.parse(localStorage.getItem("notes")) || [];
+        let currentNoteId = null;
+        let currentSortMethod = "date-desc";
+        let activeTagFilter = null;
+        let splitViewLeftId = null;
+        let splitViewRightId = null;
+        // Generate a unique ID
+        function generateId() {
+          return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+        // Save notes to localStorage
+        function saveNotes() {
+          localStorage.setItem("notes", JSON.stringify(notes));
+        }
+        // Create a new note
+        function createNote(title, content, tags) {
+          const newNote = {
+            id: generateId(),
+            title: title || "Sans titre",
+            content: content || "",
+            tags: tags || [],
+            createdAt: new Date().toISOString(),
+          };
+          notes.unshift(newNote);
+          saveNotes();
+          return newNote;
+        }
+        // Update an existing note
+        function updateNote(id, title, content, tags) {
+          const index = notes.findIndex((note) => note.id === id);
+          if (index !== -1) {
+            notes[index] = {
+              ...notes[index],
+              title: title || "Sans titre",
+              content: content || "",
+              tags: tags || [],
+              updatedAt: new Date().toISOString(),
+            };
+            saveNotes();
+            return notes[index];
+          }
+          return null;
+        }
+        // Delete a note
+        function deleteNote(id) {
+          notes = notes.filter((note) => note.id !== id);
+          saveNotes();
+        }
+        // Get all unique tags from notes
+        function getAllTags() {
+          const allTags = new Set();
+          notes.forEach((note) => {
+            note.tags.forEach((tag) => allTags.add(tag));
+          });
+          return Array.from(allTags);
+        }
+        // Count notes with a specific tag
+        function countNotesByTag(tag) {
+          return notes.filter((note) => note.tags.includes(tag)).length;
+        }
+        // Filter notes by search term and/or tag
+        function filterNotes(searchTerm, tag) {
+          let filtered = [...notes];
+          if (tag) {
+            filtered = filtered.filter((note) => note.tags.includes(tag));
+          }
+          if (searchTerm) {
+            const term = searchTerm.toLowerCase();
+            filtered = filtered.filter(
+              (note) =>
+                note.title.toLowerCase().includes(term) ||
+                note.content.toLowerCase().includes(term) ||
+                note.tags.some((tag) => tag.toLowerCase().includes(term)),
+            );
+          }
+          return filtered;
+        }
+        // Sort notes by different criteria
+        function sortNotes(notesToSort, method) {
+          const sorted = [...notesToSort];
+          switch (method) {
+            case "date-desc":
+              sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+              break;
+            case "date-asc":
+              sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+              break;
+            case "alpha":
+              sorted.sort((a, b) => a.title.localeCompare(b.title));
+              break;
+          }
+          return sorted;
+        }
+        // Format date for display
+        function formatDate(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        }
+        // Initialize with some sample notes if none exist
+        if (notes.length === 0) {
+          createNote(
+            "Bienvenue dans Carnet de Notes",
+            "# Bienvenue dans votre nouveau carnet de notes !\n\nVoici quelques fonctionnalités disponibles :\n\n- Créez des notes avec un titre et du contenu\n- Ajoutez des tags pour organiser vos notes\n- Recherchez vos notes par mot-clé ou tag\n- Triez vos notes par date ou ordre alphabétique\n- Utilisez le mode sombre pour plus de confort\n- Formatez votre texte avec Markdown\n\n**Bon travail !**",
+            ["Bienvenue", "Aide"],
+          );
+          createNote(
+            "Syntaxe Markdown",
+            "# Titre niveau 1\n## Titre niveau 2\n\nTexte en **gras** ou en *italique*\n\nListe à puces :\n- Item 1\n- Item 2\n- Item 3\n\nListe numérotée :\n1. Premier\n2. Deuxième\n3. Troisième\n\n> Citation de texte\n\n`Code inline`\n\n```\nBloc de code\n```\n\n[Lien](https://example.com)",
+            ["Markdown", "Aide"],
+          );
+          createNote(
+            "Idées de projet",
+            "## Applications à développer\n\n- Application de gestion de budget\n- Jeu de quiz en ligne\n- Portfolio personnel\n\n## Technologies à explorer\n\n- React Native\n- GraphQL\n- WebAssembly",
+            ["Projets", "Idées", "Code"],
+          );
+        }
+        window.appData = {
+          notes,
+          createNote,
+          updateNote,
+          deleteNote,
+          getAllTags,
+          countNotesByTag,
+          filterNotes,
+          sortNotes,
+          formatDate,
+          getCurrentNoteId: () => currentNoteId,
+          setCurrentNoteId: (id) => {
+            currentNoteId = id;
+          },
+          getCurrentSortMethod: () => currentSortMethod,
+          setCurrentSortMethod: (method) => {
+            currentSortMethod = method;
+          },
+          getActiveTagFilter: () => activeTagFilter,
+          setActiveTagFilter: (tag) => {
+            activeTagFilter = tag;
+          },
+          getSplitViewLeftId: () => splitViewLeftId,
+          setSplitViewLeftId: (id) => {
+            splitViewLeftId = id;
+          },
+          getSplitViewRightId: () => splitViewRightId,
+          setSplitViewRightId: (id) => {
+            splitViewRightId = id;
+          },
+        };
+      });
+    </script>
+    <script id="ui-management">
+      document.addEventListener("DOMContentLoaded", function () {
+        const appData = window.appData;
+        // DOM Elements
+        const notesContainer = document.getElementById("notes-container");
+        const notesGrid = document.getElementById("notes-grid");
+        const emptyState = document.getElementById("empty-state");
+        const editorContainer = document.getElementById("editor-container");
+        const splitViewContainer = document.getElementById("split-view-container");
+        const noteTitle = document.getElementById("note-title");
+        const noteContent = document.getElementById("note-content");
+        const noteTagsInput = document.getElementById("note-tags");
+        const noteTagsContainer = document.getElementById("note-tags-container");
+        const tagsListContainer = document.getElementById("tags-list");
+        const searchInput = document.getElementById("search-input");
+        const notesCountElement = document.getElementById("notes-count");
+        const markdownPreview = document.getElementById("markdown-preview");
+        const deleteModal = document.getElementById("delete-modal");
+        const toast = document.getElementById("toast");
+        const toastMessage = document.getElementById("toast-message");
+        const toastIcon = document.getElementById("toast-icon");
+        // Buttons
+        const newNoteBtn = document.getElementById("new-note-btn");
+        const emptyNewNoteBtn = document.getElementById("empty-new-note-btn");
+        const saveNoteBtn = document.getElementById("save-note-btn");
+        const cancelEditBtn = document.getElementById("cancel-edit-btn");
+        const addTagBtn = document.getElementById("add-tag-btn");
+        const sortDateDescBtn = document.getElementById("sort-date-desc");
+        const sortDateAscBtn = document.getElementById("sort-date-asc");
+        const sortAlphaBtn = document.getElementById("sort-alpha");
+        const themeToggle = document.getElementById("theme-toggle");
+        const splitViewToggle = document.getElementById("split-view-toggle");
+        const exitSplitViewBtn = document.getElementById("exit-split-view");
+        const cancelDeleteBtn = document.getElementById("cancel-delete");
+        const confirmDeleteBtn = document.getElementById("confirm-delete");
+        // Format buttons
+        const formatBoldBtn = document.getElementById("format-bold");
+        const formatItalicBtn = document.getElementById("format-italic");
+        const formatHeadingBtn = document.getElementById("format-heading");
+        const formatListBtn = document.getElementById("format-list");
+        const formatQuoteBtn = document.getElementById("format-quote");
+        // Split view elements
+        const splitLeftTitle = document.getElementById("split-left-title");
+        const splitLeftDate = document.getElementById("split-left-date");
+        const splitLeftContent = document.getElementById("split-left-content");
+        const splitRightTitle = document.getElementById("split-right-title");
+        const splitRightDate = document.getElementById("split-right-date");
+        const splitRightContent = document.getElementById("split-right-content");
+        // Editor display elements
+        const editorTitleDisplay = document.getElementById("editor-title-display");
+        const editorDateDisplay = document.getElementById("editor-date-display");
+        // Render the notes grid
+        function renderNotes() {
+          const searchTerm = searchInput.value.trim();
+          const tagFilter = appData.getActiveTagFilter();
+          const filteredNotes = appData.filterNotes(searchTerm, tagFilter);
+          const sortedNotes = appData.sortNotes(
+            filteredNotes,
+            appData.getCurrentSortMethod(),
+          );
+          notesGrid.innerHTML = "";
+          if (sortedNotes.length === 0) {
+            notesGrid.classList.add("hidden");
+            emptyState.classList.remove("hidden");
+          } else {
+            notesGrid.classList.remove("hidden");
+            emptyState.classList.add("hidden");
+            sortedNotes.forEach((note) => {
+              const noteCard = document.createElement("div");
+              noteCard.className =
+                "bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow overflow-hidden";
+              noteCard.dataset.noteId = note.id;
+              // Truncate content for preview
+              const contentPreview =
+                note.content.length > 100
+                  ? note.content.substring(0, 100) + "..."
+                  : note.content;
+              noteCard.innerHTML = `
+      <div class="p-4">
+      <div class="flex justify-between items-start mb-2">
+      <h3 class="font-medium text-lg">${note.title}</h3>
+      <div class="flex">
+      <button class="edit-note-btn p-1 hover:bg-gray-100 rounded !rounded-button whitespace-nowrap">
+      <div class="w-5 h-5 flex items-center justify-center">
+      <i class="ri-edit-line"></i>
+      </div>
+      </button>
+      <button class="delete-note-btn p-1 hover:bg-gray-100 rounded !rounded-button whitespace-nowrap">
+      <div class="w-5 h-5 flex items-center justify-center">
+      <i class="ri-delete-bin-line"></i>
+      </div>
+      </button>
+      </div>
+      </div>
+      <p class="text-gray-500 text-sm mb-3">${appData.formatDate(note.createdAt)}</p>
+      <p class="text-gray-700 mb-3 whitespace-pre-line">${contentPreview.replace(/[#*_>-]/g, "")}</p>
+      <div class="flex flex-wrap gap-1">
+      ${note.tags
+        .map(
+          (tag) => `
+      <span class="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">#${tag}</span>
+      `,
+        )
+        .join("")}
+      </div>
+      </div>
+      `;
+              // Add event listeners to the note card
+              noteCard.addEventListener("click", function (e) {
+                // Ignore clicks on buttons
+                if (!e.target.closest("button")) {
+                  if (splitViewContainer.classList.contains("flex")) {
+                    // In split view mode, select for left or right panel
+                    if (!appData.getSplitViewLeftId()) {
+                      appData.setSplitViewLeftId(note.id);
+                      updateSplitView();
+                    } else if (!appData.getSplitViewRightId()) {
+                      appData.setSplitViewRightId(note.id);
+                      updateSplitView();
+                    } else {
+                      // Both panels are already filled, replace the right one
+                      appData.setSplitViewRightId(note.id);
+                      updateSplitView();
+                    }
+                  } else {
+                    // Normal mode, open in view mode
+                    openNoteInView(note.id);
+                  }
+                }
+              });
+              // Edit button
+              noteCard
+                .querySelector(".edit-note-btn")
+                .addEventListener("click", function (e) {
+                  e.stopPropagation();
+                  openNoteInEditor(note.id);
+                });
+              // Delete button
+              noteCard
+                .querySelector(".delete-note-btn")
+                .addEventListener("click", function (e) {
+                  e.stopPropagation();
+                  openDeleteModal(note.id);
+                });
+              notesGrid.appendChild(noteCard);
+            });
+          }
+          // Update notes count
+          notesCountElement.textContent = sortedNotes.length;
+        }
+        // Render all tags in the sidebar
+        function renderTags() {
+          const allTags = appData.getAllTags();
+          const activeTag = appData.getActiveTagFilter();
+          tagsListContainer.innerHTML = "";
+          allTags.forEach((tag) => {
+            const tagCount = appData.countNotesByTag(tag);
+            const tagElement = document.createElement("button");
+            tagElement.className = `text-xs px-3 py-1.5 rounded-full flex items-center gap-1 !rounded-button whitespace-nowrap ${
+              activeTag === tag
+                ? "bg-primary text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`;
+            tagElement.innerHTML = `
+      <span>#${tag}</span>
+      <span class="bg-white bg-opacity-20 text-xs rounded-full w-5 h-5 inline-flex items-center justify-center">${tagCount}</span>
+      `;
+            tagElement.addEventListener("click", function () {
+              if (activeTag === tag) {
+                appData.setActiveTagFilter(null);
+              } else {
+                appData.setActiveTagFilter(tag);
+              }
+              renderTags();
+              renderNotes();
+            });
+            tagsListContainer.appendChild(tagElement);
+          });
+        }
+        // Open a note in view mode
+        function openNoteInView(noteId) {
+          const note = appData.notes.find((n) => n.id === noteId);
+          if (note) {
+            appData.setCurrentNoteId(noteId);
+            // Update view elements
+            document.getElementById("view-title").textContent = note.title;
+            document.getElementById("view-date").textContent =
+              `Créée le ${appData.formatDate(note.createdAt)}`;
+            // Render tags
+            const viewTags = document.getElementById("view-tags");
+            viewTags.innerHTML = note.tags
+              .map(
+                (tag) => `
+      <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded">#${tag}</span>
+      `,
+              )
+              .join("");
+            // Parse and render markdown content
+            const viewContent = document.getElementById("view-content");
+            let html = note.content
+              .replace(/^# (.*$)/gm, "<h1>$1</h1>")
+              .replace(/^## (.*$)/gm, "<h2>$1</h2>")
+              .replace(/^### (.*$)/gm, "<h3>$1</h3>")
+              .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+              .replace(/\*(.*?)\*/g, "<em>$1</em>")
+              .replace(/^\s*- (.*$)/gm, "<ul><li>$1</li></ul>")
+              .replace(/^\s*\d+\. (.*$)/gm, "<ol><li>$1</li></ol>")
+              .replace(/^\> (.*$)/gm, "<blockquote>$1</blockquote>")
+              .replace(/`(.*?)`/g, "<code>$1</code>")
+              .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+              .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+              .replace(/\n/g, "<br>");
+            html = html.replace(/<\/ul><ul>/g, "").replace(/<\/ol><ol>/g, "");
+            viewContent.innerHTML = html;
+            // Show view container, hide others
+            notesContainer.classList.add("hidden");
+            splitViewContainer.classList.add("hidden");
+            splitViewContainer.classList.remove("flex");
+            editorContainer.classList.add("hidden");
+            editorContainer.classList.remove("flex");
+            document.getElementById("view-container").classList.remove("hidden");
+            document.getElementById("view-container").classList.add("flex");
+          }
+        }
+
+        // Open a note in the editor
+        function openNoteInEditor(noteId) {
+          const note = appData.notes.find((n) => n.id === noteId);
+          if (note) {
+            appData.setCurrentNoteId(noteId);
+            // Set form values
+            noteTitle.value = note.title;
+            noteContent.value = note.content;
+            // Update editor title and date
+            editorTitleDisplay.textContent = "Modifier la note";
+            editorDateDisplay.textContent = `Créée le ${appData.formatDate(note.createdAt)}`;
+            // Render tags
+            renderNoteTagsInEditor(note.tags);
+            // Update markdown preview
+            updateMarkdownPreview();
+            // Show editor, hide others
+            notesContainer.classList.add("hidden");
+            splitViewContainer.classList.add("hidden");
+            splitViewContainer.classList.remove("flex");
+            document.getElementById("view-container").classList.add("hidden");
+            document.getElementById("view-container").classList.remove("flex");
+            editorContainer.classList.remove("hidden");
+            editorContainer.classList.add("flex");
+          }
+        }
+        // Create a new note and open it in the editor
+        function createNewNote() {
+          const newNote = appData.createNote("Nouvelle note", "", []);
+          appData.setCurrentNoteId(newNote.id);
+          // Clear form
+          noteTitle.value = newNote.title;
+          noteContent.value = "";
+          renderNoteTagsInEditor([]);
+          // Update editor title and date
+          editorTitleDisplay.textContent = "Nouvelle note";
+          editorDateDisplay.textContent = `Créée le ${appData.formatDate(newNote.createdAt)}`;
+          // Update markdown preview
+          updateMarkdownPreview();
+          // Show editor, hide notes list
+          notesContainer.classList.add("hidden");
+          splitViewContainer.classList.add("hidden");
+          splitViewContainer.classList.remove("flex");
+          editorContainer.classList.remove("hidden");
+          editorContainer.classList.add("flex");
+          // Focus on title field
+          noteTitle.focus();
+        }
+        // Save the current note
+        function saveCurrentNote() {
+          const noteId = appData.getCurrentNoteId();
+          const title = noteTitle.value.trim();
+          const content = noteContent.value.trim();
+          const tags = Array.from(
+            noteTagsContainer.querySelectorAll(".tag-item"),
+          ).map((tag) => tag.dataset.tag);
+          if (noteId) {
+            appData.updateNote(noteId, title, content, tags);
+            showToast("Note mise à jour avec succès", "success");
+          } else {
+            const newNote = appData.createNote(title, content, tags);
+            appData.setCurrentNoteId(newNote.id);
+            showToast("Note créée avec succès", "success");
+          }
+          // Update UI
+          renderNotes();
+          renderTags();
+          // Return to notes list
+          goToNotesList();
+        }
+        // Return to the notes list view
+        function goToNotesList() {
+          editorContainer.classList.add("hidden");
+          editorContainer.classList.remove("flex");
+          splitViewContainer.classList.add("hidden");
+          splitViewContainer.classList.remove("flex");
+          document.getElementById("view-container").classList.add("hidden");
+          document.getElementById("view-container").classList.remove("flex");
+          notesContainer.classList.remove("hidden");
+          appData.setCurrentNoteId(null);
+        }
+        // Render tags in the note editor
+        function renderNoteTagsInEditor(tags) {
+          noteTagsContainer.innerHTML = "";
+          tags.forEach((tag) => addTagToEditor(tag));
+        }
+        // Add a tag to the editor
+        function addTagToEditor(tag) {
+          if (!tag) return;
+          // Check if tag already exists
+          const existingTags = Array.from(
+            noteTagsContainer.querySelectorAll(".tag-item"),
+          ).map((item) => item.dataset.tag);
+          if (existingTags.includes(tag)) return;
+          const tagElement = document.createElement("div");
+          tagElement.className =
+            "tag-item bg-gray-100 text-gray-700 px-2 py-1 rounded flex items-center gap-1";
+          tagElement.dataset.tag = tag;
+          tagElement.innerHTML = `
+      <span>#${tag}</span>
+      <button class="remove-tag-btn w-4 h-4 flex items-center justify-center hover:bg-gray-200 rounded-full !rounded-button whitespace-nowrap">
+      <i class="ri-close-line text-xs"></i>
+      </button>
+      `;
+          tagElement
+            .querySelector(".remove-tag-btn")
+            .addEventListener("click", function () {
+              tagElement.remove();
+            });
+          noteTagsContainer.appendChild(tagElement);
+        }
+        // Update the markdown preview
+        function updateMarkdownPreview() {
+          const content = noteContent.value;
+          // Basic Markdown parsing
+          let html = content
+            // Headers
+            .replace(/^# (.*$)/gm, "<h1>$1</h1>")
+            .replace(/^## (.*$)/gm, "<h2>$1</h2>")
+            .replace(/^### (.*$)/gm, "<h3>$1</h3>")
+            // Bold
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            // Italic
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            // Lists
+            .replace(/^\s*- (.*$)/gm, "<ul><li>$1</li></ul>")
+            .replace(/^\s*\d+\. (.*$)/gm, "<ol><li>$1</li></ol>")
+            // Blockquotes
+            .replace(/^\> (.*$)/gm, "<blockquote>$1</blockquote>")
+            // Code
+            .replace(/`(.*?)`/g, "<code>$1</code>")
+            // Code blocks
+            .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+            // Links
+            .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+            // Line breaks
+            .replace(/\n/g, "<br>");
+          // Fix consecutive list items
+          html = html.replace(/<\/ul><ul>/g, "").replace(/<\/ol><ol>/g, "");
+          markdownPreview.innerHTML = html;
+        }
+        // Toggle split view
+        function toggleSplitView() {
+          if (splitViewContainer.classList.contains("flex")) {
+            // Exit split view
+            splitViewContainer.classList.remove("flex");
+            splitViewContainer.classList.add("hidden");
+            notesContainer.classList.remove("hidden");
+            appData.setSplitViewLeftId(null);
+            appData.setSplitViewRightId(null);
+          } else {
+            // Enter split view
+            notesContainer.classList.add("hidden");
+            editorContainer.classList.add("hidden");
+            editorContainer.classList.remove("flex");
+            splitViewContainer.classList.remove("hidden");
+            splitViewContainer.classList.add("flex");
+            appData.setSplitViewLeftId(null);
+            appData.setSplitViewRightId(null);
+            // Reset split view content
+            splitLeftTitle.textContent = "Sélectionnez une note";
+            splitLeftDate.textContent = "";
+            splitLeftContent.innerHTML =
+              '<p class="text-gray-500">Cliquez sur une note dans la liste pour l\'afficher ici.</p>';
+            splitRightTitle.textContent = "Sélectionnez une note";
+            splitRightDate.textContent = "";
+            splitRightContent.innerHTML =
+              '<p class="text-gray-500">Cliquez sur une note dans la liste pour l\'afficher ici.</p>';
+          }
+        }
+        // Update split view content
+        function updateSplitView() {
+          const leftId = appData.getSplitViewLeftId();
+          const rightId = appData.getSplitViewRightId();
+          if (leftId) {
+            const leftNote = appData.notes.find((n) => n.id === leftId);
+            if (leftNote) {
+              splitLeftTitle.textContent = leftNote.title;
+              splitLeftDate.textContent = appData.formatDate(leftNote.createdAt);
+              // Parse markdown for content
+              let html = leftNote.content
+                // Headers
+                .replace(/^# (.*$)/gm, "<h1>$1</h1>")
+                .replace(/^## (.*$)/gm, "<h2>$1</h2>")
+                .replace(/^### (.*$)/gm, "<h3>$1</h3>")
+                // Bold
+                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                // Italic
+                .replace(/\*(.*?)\*/g, "<em>$1</em>")
+                // Lists
+                .replace(/^\s*- (.*$)/gm, "<ul><li>$1</li></ul>")
+                .replace(/^\s*\d+\. (.*$)/gm, "<ol><li>$1</li></ol>")
+                // Blockquotes
+                .replace(/^\> (.*$)/gm, "<blockquote>$1</blockquote>")
+                // Code
+                .replace(/`(.*?)`/g, "<code>$1</code>")
+                // Code blocks
+                .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+                // Links
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                // Line breaks
+                .replace(/\n/g, "<br>");
+              // Fix consecutive list items
+              html = html.replace(/<\/ul><ul>/g, "").replace(/<\/ol><ol>/g, "");
+              splitLeftContent.innerHTML = html;
+            }
+          }
+          if (rightId) {
+            const rightNote = appData.notes.find((n) => n.id === rightId);
+            if (rightNote) {
+              splitRightTitle.textContent = rightNote.title;
+              splitRightDate.textContent = appData.formatDate(rightNote.createdAt);
+              // Parse markdown for content
+              let html = rightNote.content
+                // Headers
+                .replace(/^# (.*$)/gm, "<h1>$1</h1>")
+                .replace(/^## (.*$)/gm, "<h2>$1</h2>")
+                .replace(/^### (.*$)/gm, "<h3>$1</h3>")
+                // Bold
+                .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                // Italic
+                .replace(/\*(.*?)\*/g, "<em>$1</em>")
+                // Lists
+                .replace(/^\s*- (.*$)/gm, "<ul><li>$1</li></ul>")
+                .replace(/^\s*\d+\. (.*$)/gm, "<ol><li>$1</li></ol>")
+                // Blockquotes
+                .replace(/^\> (.*$)/gm, "<blockquote>$1</blockquote>")
+                // Code
+                .replace(/`(.*?)`/g, "<code>$1</code>")
+                // Code blocks
+                .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
+                // Links
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                // Line breaks
+                .replace(/\n/g, "<br>");
+              // Fix consecutive list items
+              html = html.replace(/<\/ul><ul>/g, "").replace(/<\/ol><ol>/g, "");
+              splitRightContent.innerHTML = html;
+            }
+          }
+        }
+        // Open delete confirmation modal
+        function openDeleteModal(noteId) {
+          appData.setCurrentNoteId(noteId);
+          deleteModal.classList.remove("hidden");
+          // Add active class for animation
+          setTimeout(() => {
+            deleteModal.querySelector(".modal-overlay").classList.add("active");
+            deleteModal.querySelector(".modal-container").classList.add("active");
+          }, 10);
+        }
+        // Close delete confirmation modal
+        function closeDeleteModal() {
+          // Remove active class for animation
+          deleteModal.querySelector(".modal-overlay").classList.remove("active");
+          deleteModal.querySelector(".modal-container").classList.remove("active");
+          setTimeout(() => {
+            deleteModal.classList.add("hidden");
+          }, 300);
+        }
+        // Delete the current note
+        function deleteCurrentNote() {
+          const noteId = appData.getCurrentNoteId();
+          if (noteId) {
+            appData.deleteNote(noteId);
+            // If the note is in split view, remove it
+            if (appData.getSplitViewLeftId() === noteId) {
+              appData.setSplitViewLeftId(null);
+            }
+            if (appData.getSplitViewRightId() === noteId) {
+              appData.setSplitViewRightId(null);
+            }
+            // Update UI
+            renderNotes();
+            renderTags();
+            updateSplitView();
+            // Show toast
+            showToast("Note supprimée avec succès", "success");
+          }
+          closeDeleteModal();
+        }
+        // Show toast notification
+        function showToast(message, type = "success") {
+          toastMessage.textContent = message;
+          if (type === "success") {
+            toastIcon.className = "ri-check-line";
+          } else if (type === "error") {
+            toastIcon.className = "ri-error-warning-line";
+          } else if (type === "info") {
+            toastIcon.className = "ri-information-line";
+          }
+          toast.classList.remove("hidden");
+          toast.classList.add("toast-enter");
+          setTimeout(() => {
+            toast.classList.remove("toast-enter");
+            toast.classList.add("toast-exit");
+            setTimeout(() => {
+              toast.classList.add("hidden");
+              toast.classList.remove("toast-exit");
+            }, 300);
+          }, 3000);
+        }
+        // Format text in the editor
+        function formatText(type) {
+          const textarea = noteContent;
+          const start = textarea.selectionStart;
+          const end = textarea.selectionEnd;
+          const selectedText = textarea.value.substring(start, end);
+          let replacement = "";
+          switch (type) {
+            case "bold":
+              replacement = `**${selectedText}**`;
+              break;
+            case "italic":
+              replacement = `*${selectedText}*`;
+              break;
+            case "heading":
+              replacement = `# ${selectedText}`;
+              break;
+            case "list":
+              replacement = `- ${selectedText}`;
+              break;
+            case "quote":
+              replacement = `> ${selectedText}`;
+              break;
+          }
+          textarea.value =
+            textarea.value.substring(0, start) +
+            replacement +
+            textarea.value.substring(end);
+          // Update preview
+          updateMarkdownPreview();
+          // Set cursor position after the inserted text
+          textarea.focus();
+          textarea.selectionStart = start + replacement.length;
+          textarea.selectionEnd = start + replacement.length;
+        }
+        // Toggle dark mode
+        function toggleDarkMode() {
+          const isDark = themeToggle.checked;
+          if (isDark) {
+            document.getElementById("app-body").classList.add("dark");
+            document.getElementById("app-body").classList.add("bg-gray-900");
+            document.getElementById("app-body").classList.add("text-white");
+            document.getElementById("sidebar").classList.add("bg-gray-800");
+            document.getElementById("sidebar").classList.add("border-gray-700");
+            document.getElementById("main-content").classList.add("bg-gray-900");
+          } else {
+            document.getElementById("app-body").classList.remove("dark");
+            document.getElementById("app-body").classList.remove("bg-gray-900");
+            document.getElementById("app-body").classList.remove("text-white");
+            document.getElementById("sidebar").classList.remove("bg-gray-800");
+            document.getElementById("sidebar").classList.remove("border-gray-700");
+            document.getElementById("main-content").classList.remove("bg-gray-900");
+          }
+          // Save preference
+          localStorage.setItem("darkMode", isDark ? "true" : "false");
+        }
+        // Event Listeners
+        newNoteBtn.addEventListener("click", createNewNote);
+        emptyNewNoteBtn.addEventListener("click", createNewNote);
+        saveNoteBtn.addEventListener("click", saveCurrentNote);
+        cancelEditBtn.addEventListener("click", goToNotesList);
+        document
+          .getElementById("edit-note-btn")
+          .addEventListener("click", function () {
+            const noteId = appData.getCurrentNoteId();
+            if (noteId) {
+              openNoteInEditor(noteId);
+            }
+          });
+        addTagBtn.addEventListener("click", function () {
+          const tagValue = noteTagsInput.value.trim();
+          if (tagValue) {
+            // Split by spaces and add each tag
+            tagValue.split(/\s+/).forEach((tag) => {
+              // Remove # if present
+              tag = tag.replace(/^#/, "");
+              if (tag) {
+                addTagToEditor(tag);
+              }
+            });
+            noteTagsInput.value = "";
+          }
+        });
+        noteTagsInput.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            addTagBtn.click();
+          }
+        });
+        // Format buttons
+        formatBoldBtn.addEventListener("click", () => formatText("bold"));
+        formatItalicBtn.addEventListener("click", () => formatText("italic"));
+        formatHeadingBtn.addEventListener("click", () => formatText("heading"));
+        formatListBtn.addEventListener("click", () => formatText("list"));
+        formatQuoteBtn.addEventListener("click", () => formatText("quote"));
+        // Sort buttons
+        sortDateDescBtn.addEventListener("click", function () {
+          appData.setCurrentSortMethod("date-desc");
+          renderNotes();
+        });
+        sortDateAscBtn.addEventListener("click", function () {
+          appData.setCurrentSortMethod("date-asc");
+          renderNotes();
+        });
+        sortAlphaBtn.addEventListener("click", function () {
+          appData.setCurrentSortMethod("alpha");
+          renderNotes();
+        });
+        // Search
+        searchInput.addEventListener("input", function () {
+          renderNotes();
+        });
+        // Markdown preview update
+        noteContent.addEventListener("input", updateMarkdownPreview);
+        // Split view
+        splitViewToggle.addEventListener("click", toggleSplitView);
+        exitSplitViewBtn.addEventListener("click", toggleSplitView);
+        // Delete modal
+        cancelDeleteBtn.addEventListener("click", closeDeleteModal);
+        confirmDeleteBtn.addEventListener("click", deleteCurrentNote);
+        // Theme toggle
+        themeToggle.addEventListener("change", toggleDarkMode);
+        // Load saved theme preference
+        const savedDarkMode = localStorage.getItem("darkMode") === "true";
+        themeToggle.checked = savedDarkMode;
+        if (savedDarkMode) {
+          toggleDarkMode();
+        }
+        // Initial render
+        renderNotes();
+        renderTags();
+        updateMarkdownPreview();
+      });
+    </script>
+    <script type="module" src="js/navigation.js"></script>
+    <script type="module" src="js/themeToggle.js"></script>
+    <script type="module" src="js/customCheckbox.js"></script>
+    <script type="module" src="js/demoModal.js"></script>
+    <script type="module" src="js/auth.js"></script>
+  </body>
+</html>
