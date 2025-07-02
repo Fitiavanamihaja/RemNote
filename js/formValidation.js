@@ -1,188 +1,158 @@
-const loginForm = document.getElementById("loginForm");
-const signupForm = document.getElementById("signupForm");
+document.addEventListener("DOMContentLoaded", function () {
+  if (localStorage.getItem("isAuthenticated") === "true") {
+    window.location.href = "app.html";
+  }
 
+  function showError(field, message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'text-red-500 text-sm mt-1 error-message';
+    errorDiv.textContent = message;
+    const parent = field.parentElement;
+    if (parent.querySelector('.error-message')) {
+      parent.querySelector('.error-message').remove();
+    }
+    parent.appendChild(errorDiv);
+    
+    setTimeout(() => {
+      if (errorDiv.parentNode) {
+        errorDiv.parentNode.removeChild(errorDiv);
+      }
+    }, 5000);
+  }
 
-loginForm.innerHTML = `
-<div class="container mx-auto px-4 py-16">
-    <div class="max-w-md mx-auto bg-white !rounded-lg shadow-lg p-8">
-      <div class="text-center mb-8">
-        <h1 class="text-2xl font-['Pacifico'] text-primary mb-2">RemN</h1>
-        <h2 class="text-2xl font-bold text-gray-900">Connexion</h2>
-      </div>
-      <form id="loginForm">
-        <div class="mb-4">
-          <label
-            for="email"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Email</label
-          >
-          <input
-            type="email"
-            id="email"
-            class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-            placeholder="votre@email.com"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label
-            for="password"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Mot de passe</label
-          >
-          <input
-            type="password"
-            id="password"
-            class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center">
-            <input type="checkbox" id="remember" class="hidden" />
-            <div
-              class="w-5 h-5 border border-gray-300 !rounded-sm mr-2 flex items-center justify-center cursor-pointer"
-              id="customCheckbox"
-            >
-              <i class="ri-check-line text-white hidden"></i>
-            </div>
-            <label
-              for="remember"
-              class="text-sm text-gray-700 cursor-pointer"
-              >Se souvenir de moi</label
-            >
-          </div>
-          <a href="#" class="text-sm text-primary hover:underline"
-            >Mot de passe oublié ?</a
-          >
-        </div>
-        <button
-          type="submit"
-          class="w-full bg-primary text-white py-2 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap"
-        >
-          Se connecter
-        </button>
-      </form>
-      <div class="mt-6 text-center">
-        <div class="relative flex items-center justify-center">
-          <div class="border-t border-gray-300 absolute w-full"></div>
-          <span class="bg-white px-2 text-sm text-gray-500 relative"
-            >ou</span
-          >
-        </div>
-        <p class="mt-4 text-sm text-gray-600">
-          Pas encore de compte ?
-          <a href="#" class="text-primary hover:underline" id="goToSignup"
-            >S'inscrire</a
-          >
-        </p>
-      </div>
-    </div>
-  </div>`;
+  function hideErrors() {
+    document.querySelectorAll('.error-message').forEach(error => {
+      if (error.parentNode) {
+        error.parentNode.removeChild(error);
+      }
+    });
+  }
 
-signupForm.innerHTML = `
-<div class="container mx-auto px-4 py-16">
-    <div class="max-w-md mx-auto bg-white !rounded-lg shadow-lg p-8">
-      <div class="text-center mb-8">
-        <h1 class="text-2xl font-['Pacifico'] text-primary mb-2">RemN</h1>
-        <h2 class="text-2xl font-bold text-gray-900">Créer un compte</h2>
-      </div>
-      <form id="signupForm">
-        <div class="mb-4">
-          <label
-            for="username"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Nom d'utilisateur</label
-          >
-          <input
-            type="text"
-            id="username"
-            class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-            placeholder="JohnDoe"
-            required
-          />
-        </div>
-        <div class="mb-4">
-          <label
-            for="signupEmail"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Email</label
-          >
-          <input
-            type="email"
-            id="signupEmail"
-            class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-            placeholder="votre@email.com"
-            required
-          />
-        </div>
-        <div class="mb-4">
-          <label
-            for="signupPassword"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Mot de passe</label
-          >
-          <input
-            type="password"
-            id="signupPassword"
-            class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-        <div class="mb-6">
-          <label
-            for="confirmPassword"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Confirmer le mot de passe</label
-          >
-          <input
-            type="password"
-            id="confirmPassword"
-            class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-            placeholder="••••••••"
-            required
-          />
-        </div>
-        <div class="flex items-center mb-6">
-          <input type="checkbox" id="terms" class="hidden" required />
-          <div
-            class="w-5 h-5 border border-gray-300 !rounded-sm mr-2 flex items-center justify-center cursor-pointer"
-            id="termsCheckbox"
-          >
-            <i class="ri-check-line text-white hidden"></i>
-          </div>
-          <label for="terms" class="text-sm text-gray-700 cursor-pointer"
-            >J'accepte les
-            <a href="#" class="text-primary hover:underline"
-              >conditions d'utilisation</a
-            ></label
-          >
-        </div>
-        <button
-          type="submit"
-          class="w-full bg-primary text-white py-2 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap"
-        >
-          S'inscrire
-        </button>
-      </form>
-      <div class="mt-6 text-center">
-        <div class="relative flex items-center justify-center">
-          <div class="border-t border-gray-300 absolute w-full"></div>
-          <span class="bg-white px-2 text-sm text-gray-500 relative"
-            >ou</span
-          >
-        </div>
-        <p class="mt-4 text-sm text-gray-600">
-          Déjà un compte ?
-          <a href="#" class="text-primary hover:underline" id="goToLogin"
-            >Se connecter</a
-          >
-        </p>
-      </div>
-    </div>
-  </div>`;
+  function showLoading(button) {
+    const originalText = button.textContent;
+    button.innerHTML = '<div class="flex items-center justify-center"><i class="ri-loader-4-line animate-spin"></i></div>';
+    button.disabled = true;
+    return originalText;
+  }
+
+  function hideLoading(button, originalText) {
+    button.innerHTML = originalText;
+    button.disabled = false;
+  }
+
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    hideErrors();
+
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const submitButton = this.querySelector('button[type="submit"]');
+
+    if (!email.value.trim()) {
+      showError(email, "Veuillez entrer une adresse email");
+      return;
+    }
+    if (!password.value.trim()) {
+      showError(password, "Veuillez entrer un mot de passe");
+      return;
+    }
+
+    const originalText = showLoading(submitButton);
+
+    setTimeout(() => {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find(u => u.email === email.value && u.password === password.value);
+
+      if (user) {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        window.location.href = 'app.html';
+      } else {
+        showError(email, "Email ou mot de passe incorrect");
+        hideLoading(submitButton, originalText);
+      }
+    }, 1000);
+  });
+
+  document.getElementById("signupForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    hideErrors();
+
+    const username = document.getElementById("username");
+    const email = document.getElementById("signupEmail");
+    const password = document.getElementById("signupPassword");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const submitButton = this.querySelector('button[type="submit"]');
+
+    if (!username.value.trim()) {
+      showError(username, "Veuillez entrer un nom d'utilisateur");
+      return;
+    }
+    if (!email.value.trim()) {
+      showError(email, "Veuillez entrer une adresse email");
+      return;
+    }
+    if (!password.value.trim()) {
+      showError(password, "Veuillez entrer un mot de passe");
+      return;
+    }
+    if (password.value !== confirmPassword.value) {
+      showError(password, "Les mots de passe ne correspondent pas");
+      showError(confirmPassword, "Les mots de passe ne correspondent pas");
+      return;
+    }
+
+    const originalText = showLoading(submitButton);
+
+    setTimeout(() => {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const existingUser = users.find(u => u.email === email.value);
+
+      if (existingUser) {
+        showError(email, "Cette adresse email est déjà utilisée");
+        hideLoading(submitButton, originalText);
+        return;
+      }
+
+      const newUser = {
+        id: Date.now(),
+        username: username.value,
+        email: email.value,
+        password: password.value
+      };
+
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      window.location.href = 'app.html';
+    }, 1500);
+  });
+
+  document.getElementById('goToSignup')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('.fixed.inset-0').style.transform = 'translateY(-100%)';
+    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(0)';
+  });
+
+  document.getElementById('goToLogin')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('.fixed.inset-0').style.transform = 'translateY(0)';
+    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(100%)';
+  });
+
+  document.getElementById('loginBtn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('.fixed.inset-0').style.transform = 'translateY(0)';
+    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(100%)';
+  });
+
+  document.getElementById('signupBtn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    document.querySelector('.fixed.inset-0').style.transform = 'translateY(-100%)';
+    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(0)';
+  });
+});
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -192,49 +162,114 @@ document.addEventListener("DOMContentLoaded", function () {
     window.location.href = "app.html";
   }
 
+  // Gestionnaire d'événements pour le formulaire de connexion
   loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    hideErrors();
 
-    // Vérifier les informations dans localStorage
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(
-      (u) => u.email === email && u.password === password
-    );
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const submitButton = loginForm.querySelector('button[type="submit"]');
 
-    if (user) {
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      window.location.href = "app.html";
-    } else {
-      alert("Email ou mot de passe incorrect");
+    // Validation du formulaire
+    if (!email.value.trim()) {
+      showError(email, "Veuillez entrer une adresse email");
+      return;
     }
+    if (!password.value.trim()) {
+      showError(password, "Veuillez entrer un mot de passe");
+      return;
+    }
+
+    // Afficher l'état de chargement
+    const originalText = showLoading(submitButton);
+
+    // Simuler une requête d'authentification
+    setTimeout(() => {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = users.find(u => u.email === email.value && u.password === password.value);
+
+      if (user) {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        window.location.href = 'app.html';
+      } else {
+        showError(email, "Email ou mot de passe incorrect");
+        hideLoading(submitButton, originalText);
+      }
+    }, 1000);
   });
 
-  // Gestion de l'inscription
+  // Gestionnaire d'événements pour le formulaire d'inscription
   signupForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    const email = document.getElementById("signupEmail").value;
-    const password = document.getElementById("signupPassword").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    hideErrors();
 
-    if (password !== confirmPassword) {
-      alert("Les mots de passe ne correspondent pas");
+    const username = document.getElementById("username");
+    const email = document.getElementById("signupEmail");
+    const password = document.getElementById("signupPassword");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const submitButton = signupForm.querySelector('button[type="submit"]');
+
+    // Validation du formulaire
+    if (!username.value.trim()) {
+      showError(username, "Veuillez entrer un nom d'utilisateur");
+      return;
+    }
+    if (!email.value.trim()) {
+      showError(email, "Veuillez entrer une adresse email");
+      return;
+    }
+    if (!password.value.trim()) {
+      showError(password, "Veuillez entrer un mot de passe");
+      return;
+    }
+    if (password.value !== confirmPassword.value) {
+      showError(password, "Les mots de passe ne correspondent pas");
+      showError(confirmPassword, "Les mots de passe ne correspondent pas");
       return;
     }
 
-    // Enregistrer le nouvel utilisateur
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    if (users.some((u) => u.email === email)) {
-      alert("Cet email est déjà utilisé");
-      return;
-    }
+    // Afficher l'état de chargement
+    const originalText = showLoading(submitButton);
 
-    users.push({ email, password });
-    localStorage.setItem("users", JSON.stringify(users));
-    localStorage.setItem("isAuthenticated", "true");
-    localStorage.setItem("currentUser", JSON.stringify({ email, password }));
-    window.location.href = "app.html";
+    // Simuler une requête d'inscription
+    setTimeout(() => {
+      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      const existingUser = users.find(u => u.email === email.value);
+
+      if (existingUser) {
+        showError(email, "Cette adresse email est déjà utilisée");
+        hideLoading(submitButton, originalText);
+        return;
+      }
+
+      const newUser = {
+        id: Date.now(),
+        username: username.value,
+        email: email.value,
+        password: password.value
+      };
+
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('currentUser', JSON.stringify(newUser));
+      window.location.href = 'app.html';
+    }, 1500);
+  });
+
+  // Gestionnaire d'événements pour les boutons de connexion/inscription
+  document.getElementById('loginBtn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    loginForm.style.display = 'block';
+    signupForm.style.display = 'none';
+  });
+
+  document.getElementById('signupBtn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'block';
   });
 });
+  
