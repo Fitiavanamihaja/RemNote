@@ -128,30 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = 'app.html';
     }, 1500);
   });
-
-  document.getElementById('goToSignup')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelector('.fixed.inset-0').style.transform = 'translateY(-100%)';
-    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(0)';
-  });
-
-  document.getElementById('goToLogin')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelector('.fixed.inset-0').style.transform = 'translateY(0)';
-    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(100%)';
-  });
-
-  document.getElementById('loginBtn')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelector('.fixed.inset-0').style.transform = 'translateY(0)';
-    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(100%)';
-  });
-
-  document.getElementById('signupBtn')?.addEventListener('click', function(e) {
-    e.preventDefault();
-    document.querySelector('.fixed.inset-0').style.transform = 'translateY(-100%)';
-    document.querySelector('.fixed.inset-0.-translate-y-full').style.transform = 'translateY(0)';
-  });
 });
 
 

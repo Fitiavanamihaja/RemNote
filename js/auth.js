@@ -6,7 +6,7 @@ if (localStorage.getItem('isAuthenticated') !== 'true') {
 // Fonction de déconnexion
 function setupLogout() {
   const logoutBtn = document.createElement('button');
-  logoutBtn.className = 'logout-btn';
+  logoutBtn.className = 'logout-btn text-red-500 py-2';
   logoutBtn.innerHTML = '<i class="ri-logout-box-r-line"></i> Déconnexion';
   logoutBtn.onclick = () => {
     localStorage.removeItem('isAuthenticated');
@@ -23,7 +23,7 @@ function displayUserEmail() {
     const userEmail = document.createElement('div');
     userEmail.className = 'user-email';
     userEmail.textContent = user.email;
-    document.querySelector('aside').prepend(userEmail);
+    document.querySelector('#header-right').prepend(userEmail);
   }
 }
 
