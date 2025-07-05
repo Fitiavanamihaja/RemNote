@@ -1,11 +1,9 @@
-:where([class^="ri-"])::before {
-    content: "\f3c2";
-}
-
+/* Body styles */
 body {
     font-family: 'Inter', sans-serif;
 }
 
+/* Markdown preview styles */
 .markdown-preview h1 {
     font-size: 1.5rem;
     font-weight: 700;
@@ -76,7 +74,7 @@ body {
     border-left-color: #4b5563;
 }
 
-/* Masquer les flèches des input number */
+/* Hide number input arrows */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -87,19 +85,53 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-/* Switch personnalisé */
+/* Switch styles for theme toggle */
 .switch-input {
     display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 60px;
+    height: 30px;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 30px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.switch-input:checked + .slider {
+    background-color: #4F46E5;
+}
+
+.switch-input:checked + .slider:before {
+    transform: translateX(30px);
 }
 
 .switch-label {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 26px;
-    background-color: #e5e7eb;
-    border-radius: 13px;
-    transition: all 0.3s;
+    width: 60px;
+    height: 30px;
+    background-color: #ccc;
+    border-radius: 30px;
+    transition: all 0.4s;
     cursor: pointer;
 }
 
@@ -110,27 +142,107 @@ input[type=number] {
     height: 22px;
     border-radius: 50%;
     background-color: white;
-    top: 2px;
-    left: 2px;
-    transition: all 0.3s;
+    top: 4px;
+    left: 4px;
+    transition: all 0.4s;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.switch-input:checked+.switch-label {
+.switch-input:checked + .switch-label {
     background-color: #4F46E5;
 }
 
-.switch-input:checked+.switch-label:after {
-    left: calc(100% - 24px);
+.switch-input:checked + .switch-label:after {
+    left: calc(100% - 26px);
 }
 
-/* Animation pour les toasts */
+/* Sidebar toggle (hamburger menu) */
+#sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#sidebar-toggle i {
+    font-size: 1.5rem;
+    color: #374151;
+    transition: color 0.3s ease;
+}
+
+.dark #sidebar-toggle i {
+    color: #d1d5db;
+}
+
+/* Sidebar styles */
+#sidebar {
+    width: 16rem;
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 767px) {
+    #sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 10;
+    }
+    #sidebar:not(.hidden) {
+        transform: translateX(0);
+    }
+    #main-content {
+        padding-left: 0 !important;
+    }
+}
+
+@media (min-width: 768px) {
+    #sidebar.hidden {
+        display: none;
+    }
+    #main-content {
+        transition: padding-left 0.3s ease;
+    }
+}
+
+/* Notes grid */
+#notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    #notes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Editor and view containers */
+#editor-container, #view-container {
+    max-width: 100%;
+    padding: 1rem;
+}
+
+@media (min-width: 768px) {
+    #editor-container, #view-container {
+        max-width: 48rem;
+        margin: 0 auto;
+    }
+}
+
+/* Toast animations */
 @keyframes slideIn {
     from {
         transform: translateY(100%);
         opacity: 0;
     }
-
     to {
         transform: translateY(0);
         opacity: 1;
@@ -142,7 +254,6 @@ input[type=number] {
         transform: translateY(0);
         opacity: 1;
     }
-
     to {
         transform: translateY(100%);
         opacity: 0;
@@ -157,7 +268,7 @@ input[type=number] {
     animation: slideOut 0.3s forwards;
 }
 
-/* Transition pour les modals */
+/* Modal animations */
 .modal-overlay {
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -176,4 +287,32 @@ input[type=number] {
 .modal-container.active {
     transform: scale(1);
     opacity: 1;
+}
+
+@media (max-width: 640px) {
+    .modal-container {
+        width: 90%;
+        max-width: 90%;
+    }
+}
+
+/* Authentication styles */
+.user-email {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.dark .user-email {
+    color: #d1d5db;
+}
+
+.logout-btn {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* Custom Tailwind button radius */
+.rounded-button {
+    border-radius: 8px;
 }
