@@ -1,63 +1,85 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const themeToggle = document.getElementById("themeToggle");
-  const body = document.body;
-  const root = document.documentElement;
+const themeToggle = document.getElementById("themeToggle");
+const themeIcon = document.querySelector("#theme-toggle-label i");
+const themeSlider = document.querySelector("#theme-toggle-label .slider");
+const root = document.documentElement;
+const sidebarToggle = document.getElementById("sidebar-toggle");
+const sidebar = document.getElementById("sidebar");
+const sidebarIcon = document.querySelector("#sidebar-toggle i");
 
-  const darkElements = [
-    "header",
-    "footer",
-    "#loginPage",
-    "#signupPage",
-    ".card-feature",
-    "form",
-    ".text-gray-600",
-    ".text-gray-900",
-    ".bg-white",
-    ".border-gray-100",
-    ".shadow-md",
-    ".shadow-lg",
-  ];
+// Validate DOM elements
+if (!themeToggle) {
+  console.warn("themeToggle element not found. Theme switching disabled.");
+}
+if (!themeIcon && !themeSlider) {
+  console.warn("theme-toggle-label icon or slider not found. Theme indicator switching disabled.");
+}
+if (sidebarToggle && !sidebar) {
+  console.warn("sidebar element not found. Sidebar toggling disabled.");
+}
+if (sidebarToggle && !sidebarIcon) {
+  console.warn("sidebar-toggle icon not found. Hamburger menu icon switching disabled.");
+}
 
-  function applyDarkMode() {
-    root.classList.add("dark");
-    body.classList.remove("bg-white");
-    body.classList.add("bg-gray-900");
-
-    darkElements.forEach((selector) => {
-      document.querySelectorAll(selector).forEach((el) => {
-        el.classList.add("dark-mode");
-      });
-    });
+// Apply dark mode
+function applyDarkMode() {
+  root.classList.add("dark");
+  if (themeIcon) {
+    themeIcon.classList.remove("ri-sun-line");
+    themeIcon.classList.add("ri-moon-line");
   }
+  localStorage.setItem("theme", "dark");
+}
 
-  function applyLightMode() {
-    root.classList.remove("dark");
-    body.classList.remove("bg-gray-900");
-    body.classList.add("bg-white");
-
-    darkElements.forEach((selector) => {
-      document.querySelectorAll(selector).forEach((el) => {
-        el.classList.remove("dark-mode");
-      });
-    });
+// Apply light mode
+function applyLightMode() {
+  root.classList.remove("dark");
+  if (themeIcon) {
+    themeIcon.classList.remove("ri-moon-line");
+    themeIcon.classList.add("ri-sun-line");
   }
+  localStorage.setItem("theme", "light");
+}
 
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark") {
-    applyDarkMode();
-    themeToggle.checked = true;
-  } else {
-    applyLightMode();
-    themeToggle.checked = false;
-  }
+// Initialize theme
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "dark") {
+  applyDarkMode();
+  if (themeToggle) themeToggle.checked = true;
+} else {
+  applyLightMode();
+  if (themeToggle) themeToggle.checked = false;
+}
 
+// Theme toggle event listener
+if (themeToggle) {
   themeToggle.addEventListener("change", function () {
     if (this.checked) {
       applyDarkMode();
-      localStorage.setItem("theme", "dark");
     } else {
       applyLightMode();
-      localStorage.setItem("theme", "light");
     }
   });
-});
+}
+
+// Sidebar toggle event listener
+if (sidebarToggle && sidebar) {
+  sidebarToggle.addEventListener("click", function () {
+    const isHidden = sidebar.classList.contains("hidden");
+    sidebar.classList.toggle("hidden");
+
+    const mainContent = document.getElementById("main-content");
+    if (mainContent) {
+      if (isHidden) {
+        mainContent.classList.remove("md:pl-0");
+        mainContent.classList.add("md:pl-64");
+      } else {
+        mainContent.classList.remove("md:pl-64");
+        mainContent.classList.add("md:pl-0");
+      }
+    }
+    if (sidebarIcon) {
+      sidebarIcon.classList.toggle("ri-close-line");
+      sidebarIcon.classList.toggle("ri-menu-line");
+    }
+  });
+}
