@@ -6,28 +6,26 @@
     <title>RemNote - Prenez des notes facilement</title>
     <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <script>
-      length;
       tailwind.config = {
+        darkMode: "class",
         theme: {
           extend: {
-            colors: { primary: "#4F46E5", secondary: "#10B981" },
+            colors: {
+              primary: "#4F46E5",
+              secondary: "#10B981",
+            },
             borderRadius: {
-              none: "0px",
-              sm: "4px",
-              DEFAULT: "8px",
-              md: "12px",
-              lg: "16px",
-              xl: "20px",
-              "2xl": "24px",
-              "3xl": "32px",
-              full: "9999px",
               button: "8px",
             },
           },
         },
       };
     </script>
-    <link rel="shortcut icon" href="public/remnoteicon.png" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="public/remnoteicon.png"
+      type="image/x-icon"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -43,57 +41,73 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css"
     />
     <link rel="stylesheet" href="css/index.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.halo.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
   </head>
-  <body class="bg-white min-h-screen">
-    <header class="w-full bg-white shadow-sm fixed top-0 left-0 right-0 z-10">
-      <div
-        class="container mx-auto px-4 py-4 flex justify-between items-center"
+  <body class="bg-white dark:bg-gray-900 min-h-screen">
+    <header
+  class="bg-white dark:bg-gray-800 shadow-sm w-full fixed top-0 left-0 right-0 z-50 backdrop-blur-md shadow-sm animate-fade-down transition-all duration-500"
+>
+  <div
+    class="container mx-auto px-4 sm:px-6 md:px-8 py-3 sm:py-4 flex flex-wrap items-center justify-between gap-2 sm:gap-4"
+  >
+    <div class="flex items-center">
+      <h1
+        class="text-xl sm:text-2xl font-['Pacifico'] text-primary animate-fade-left duration-700"
       >
-        <div class="flex items-center">
-          <h1 class="text-2xl font-['Pacifico'] text-primary">RemN</h1>
-        </div>
-        <div class="flex items-center space-x-6">
-          <label class="theme-switch">
-            <input type="checkbox" id="themeToggle" />
-            <span class="slider"></span>
-          </label>
-          <a
-            href="#"
-            class="text-gray-600 hover:text-primary transition-colors"
-            id="loginBtn"
-            >Se connecter</a
-          >
-          <a
-            href="#"
-            class="bg-primary text-white px-4 py-2 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap"
-            id="signupBtn"
-            >S'inscrire</a
-          >
-        </div>
-      </div>
-    </header>
+        RemNote
+      </h1>
+    </div>
+    <div
+      class="flex items-center gap-2 sm:gap-4 animate-fade-right duration-700 delay-200"
+    >
+    <label id="theme-toggle-label" class="cursor-pointer p-2 rounded-button bg-gray-100 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600">
+      <input type="checkbox" id="themeToggle" class="switch-input opacity-0 absolute" />
+      <i class="ri-sun-line text-gray-900 dark:text-gray-100"></i> 
+    </label>
+      <a
+        href="#"
+        class="bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-100 border border-gray-300 dark:border-gray-600 hover:text-primary transition-colors font-medium text-sm sm:text-base px-2 sm:px-4 py-1 sm:py-2 rounded-button"
+        id="loginBtn"
+      >
+        Se connecter
+      </a>
+      <a
+        href="#"
+        class="bg-primary text-white px-2 sm:px-4 py-1 sm:py-2 rounded-button hover:bg-opacity-90 transition-all font-medium text-sm sm:text-base"
+        id="signupBtn"
+      >
+        S'inscrire
+      </a>
+    </div>
+  </div>
+</header>
     <main>
       <!-- Landing Page -->
       <section id="landingPage">
         <div
-          class="hero-bg w-full h-screen flex items-center justify-center bg-gradient-to-r from-white to-transparent relative overflow-hidden"
+          id="hero-bg"
+          class="w-full h-auto md:h-screen flex items-center justify-center relative overflow-hidden"
         >
           <div class="container mx-auto p-4">
             <div
               class="max-w-7xl m-auto flex flex-col md:flex-row items-center gap-12"
             >
-              <div class="w-full md:w-1/2 z-10">
+              <div class="pt-24 w-full md:w-1/2 z-10">
                 <span
                   class="inline-block bg-primary bg-opacity-10 text-primary px-4 py-2 !rounded-full text-sm font-medium mb-6"
                   >✨ La meilleure app de notes</span
                 >
                 <h1
-                  class="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight"
+                  class="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight"
                 >
                   Capturez vos idées,
                   <span class="text-primary">instantanément</span>
                 </h1>
-                <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                <p
+                  class="text-gray-600 dark:text-gray-300 text-xl text-gray-600 mb-8 leading-relaxed"
+                >
                   Une application simple et élégante pour organiser vos pensées,
                   idées et tâches. Prenez des notes avec style et retrouvez-les
                   facilement.
@@ -111,7 +125,7 @@
                     En savoir plus
                   </button>
                 </div>
-                <div class="mt-12 flex items-center gap-8">
+                <div class="mt-6 md:mt-12 flex items-center gap-8">
                   <div class="flex -space-x-4">
                     <img
                       src="public/user1.jpg"
@@ -137,7 +151,9 @@
                       <i class="ri-star-fill"></i>
                       <i class="ri-star-fill"></i>
                     </div>
-                    <p class="text-gray-600 text-sm mt-1">
+                    <p
+                      class="text-gray-600 dark:text-gray-300 text-gray-600 text-sm mt-1"
+                    >
                       Plus de 10,000 utilisateurs satisfaits
                     </p>
                   </div>
@@ -145,7 +161,7 @@
               </div>
               <div class="w-full md:w-1/2 relative">
                 <div
-                  class="absolute -bottom-8 -right-8 bg-white p-6 !rounded-2xl shadow-lg max-w-xs"
+                  class="absolute -bottom-8 -right-8 bg-white bg-opacity-50 p-6 !rounded-2xl shadow-lg max-w-xs"
                 >
                   <div class="flex items-center gap-4 mb-4">
                     <div
@@ -153,11 +169,15 @@
                     >
                       <i class="ri-flashlight-line ri-2x"></i>
                     </div>
-                    <div>
+                    <div class="hidden md:block">
                       <h3 class="font-semibold text-gray-900">
                         Interface intuitive
                       </h3>
-                      <p class="text-sm text-gray-600">Simple et efficace</p>
+                      <p
+                        class="text-gray-600 dark:text-gray-300 text-sm text-gray-600"
+                      >
+                        Simple et efficace
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -165,23 +185,25 @@
             </div>
           </div>
         </div>
-        <div class="container mx-auto px-4 py-24">
+        <div class="container mx-auto px-4 py-24 bg-white dark:bg-gray-900">
           <div class="text-center mb-20">
             <span
               class="inline-block bg-primary bg-opacity-10 text-primary px-4 py-2 !rounded-full text-sm font-medium mb-6"
               >Fonctionnalités</span
             >
-            <h2 class="text-4xl font-bold text-gray-900 mb-6">
+            <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Tout ce dont vous avez besoin
             </h2>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p
+              class="text-gray-600 dark:text-gray-300 text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed"
+            >
               Découvrez comment RemNote peut transformer votre façon de prendre
               et d'organiser vos notes.
             </p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div
-              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg border border-gray-100 card-feature opacity-0 translate-y-10 transition-all duration-700 delay-[var(--delay)] bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <div
                 class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
@@ -190,16 +212,18 @@
                   class="ri-markdown-line ri-2x text-primary group-hover:text-white"
                 ></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Markdown intégré
               </h3>
-              <p class="text-gray-600 leading-relaxed">
+              <p
+                class="text-gray-600 dark:text-gray-300 text-gray-600 leading-relaxed"
+              >
                 Formatez vos notes avec du texte en gras, italique, des listes
                 et plus encore grâce au support Markdown.
               </p>
             </div>
             <div
-              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg border border-gray-100 card-feature opacity-0 translate-y-10 transition-all duration-700 delay-[var(--delay)] bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <div
                 class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
@@ -208,16 +232,16 @@
                   class="ri-price-tag-3-line ri-2x text-primary group-hover:text-white"
                 ></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Organisation par tags
               </h3>
-              <p class="text-gray-600">
+              <p class="text-gray-600 dark:text-gray-300 text-gray-600">
                 Classez vos notes avec des tags personnalisés pour les retrouver
                 rapidement quand vous en avez besoin.
               </p>
             </div>
             <div
-              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg border border-gray-100 card-feature opacity-0 translate-y-10 transition-all duration-700 delay-[var(--delay)] bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <div
                 class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
@@ -226,16 +250,16 @@
                   class="ri-layout-2-line ri-2x text-primary group-hover:text-white"
                 ></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              <h3 class="text-xl font-semibold dark:text-white text-gray-900 mb-2">
                 Mode double affichage
               </h3>
-              <p class="text-gray-600">
+              <p class="text-gray-600 dark:text-gray-300 text-gray-600">
                 Comparez ou travaillez sur deux notes simultanément grâce à
                 notre interface flexible.
               </p>
             </div>
             <div
-              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100"
+              class="group bg-white p-6 !rounded-lg shadow-md hover:shadow-lg border border-gray-100 card-feature opacity-0 translate-y-10 transition-all duration-700 delay-[var(--delay)] bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
             >
               <div
                 class="w-16 h-16 bg-primary bg-opacity-10 !rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-white transition-all duration-300"
@@ -244,17 +268,17 @@
                   class="ri-search-line ri-2x text-primary group-hover:text-white"
                 ></i>
               </div>
-              <h3 class="text-xl font-semibold text-gray-900 mb-2">
+              <h3 class="text-xl font-semibold dark:text-white text-gray-900 mb-2">
                 Recherche avancée
               </h3>
-              <p class="text-gray-600">
+              <p class="text-gray-600 dark:text-gray-300 text-gray-600">
                 Retrouvez instantanément n'importe quelle note grâce à notre
                 moteur de recherche puissant.
               </p>
             </div>
           </div>
           <section>
-            <div class="bg-gradient-to-b from-white to-gray-50 py-32">
+            <div class="dark:bg-gray-900 bg-white pt-32">
               <div class="container mx-auto px-4">
                 <div class="max-w-4xl mx-auto text-center">
                   <span
@@ -262,11 +286,13 @@
                     >Commencez maintenant</span
                   >
                   <h2
-                    class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight"
+                    class="text-gray-900 dark:text-white text-4xl md:text-5xl font-bold mb-6 leading-tight"
                   >
                     Prêt à organiser vos idées ?
                   </h2>
-                  <p class="text-xl text-gray-600 mb-12 leading-relaxed">
+                  <p
+                    class="text-gray-600 dark:text-gray-300 text-xl text-gray-600 mb-12 leading-relaxed"
+                  >
                     Rejoignez plus de 10,000 utilisateurs qui améliorent leur
                     productivité avec RemNote. Commencez gratuitement dès
                     aujourd'hui !
@@ -322,7 +348,9 @@
                               >
                                 Éditeur Markdown intuitif
                               </h4>
-                              <p class="text-gray-600">
+                              <p
+                                class="text-gray-600 dark:text-gray-300 text-gray-600"
+                              >
                                 Formatez vos notes facilement avec notre éditeur
                                 Markdown intégré. Texte en gras, listes, liens -
                                 tout est possible.
@@ -339,7 +367,9 @@
                               >
                                 Organisation intelligente
                               </h4>
-                              <p class="text-gray-600">
+                              <p
+                                class="text-gray-600 dark:text-gray-300 text-gray-600"
+                              >
                                 Classez vos notes avec des tags personnalisés et
                                 retrouvez-les instantanément grâce à notre
                                 recherche avancée.
@@ -364,12 +394,14 @@
             </div>
           </section>
         </div>
-        <footer class="bg-gray-900 text-white py-12">
+        <footer class="bg-gray-900 dark:bg-gray-950 text-white py-12">
           <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
-                <h3 class="text-xl font-['Pacifico'] text-white mb-4">RemN</h3>
-                <p class="text-gray-400">
+                <h3 class="text-xl font-['Pacifico'] text-white mb-4">
+                  RemNote
+                </h3>
+                <p class="text-gray-600 dark:text-gray-300 text-gray-400">
                   Simplifiez votre vie numérique avec notre application de prise
                   de notes intuitive et puissante.
                 </p>
@@ -478,7 +510,9 @@
               </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-              <p class="text-gray-500">© 2025 RemNote. Tous droits réservés.</p>
+              <p class="text-gray-600 dark:text-gray-300 text-gray-500">
+                © 2025 RemNote. Tous droits réservés.
+              </p>
             </div>
           </div>
         </footer>
@@ -486,196 +520,218 @@
       <!-- Login Page -->
       <section
         id="loginPage"
-        class="hidden pt-24 min-h-screen flex items-center justify-center bg-gray-50"
+        class="hidden pt-24 min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900"
       >
-      <div class="container mx-auto px-4 py-16">
-        <div class="max-w-md mx-auto bg-white !rounded-lg shadow-lg p-8">
-          <div class="text-center mb-8">
-            <h1 class="text-2xl font-['Pacifico'] text-primary mb-2">RemN</h1>
-            <h2 class="text-2xl font-bold text-gray-900">Connexion</h2>
-          </div>
-          <form id="loginForm">
-            <div class="mb-4">
-              <label
-                for="email"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >Email</label
-              >
-              <input
-                type="email"
-                id="email"
-                class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-                placeholder="votre@email.com"
-                required
-              />
+        <div id="tsparticles-bg1" class="absolute inset-0 z-0"></div>
+        <div class="container mx-auto px-4 py-16 relative">
+          <div
+            class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8"
+          >
+            <div class="text-center mb-8">
+              <h1 class="text-2xl font-['Pacifico'] text-primary mb-2">
+                RemNote
+              </h1>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Connexion
+              </h2>
             </div>
-            <div class="mb-6">
-              <label
-                for="password"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >Mot de passe</label
-              >
-              <input
-                type="password"
-                id="password"
-                class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            <div class="flex items-center justify-between mb-6">
-              <div class="flex items-center">
-                <input type="checkbox" id="remember" class="hidden" />
-                <div
-                  class="w-5 h-5 border border-gray-300 !rounded-sm mr-2 flex items-center justify-center cursor-pointer"
-                  id="customCheckbox"
-                >
-                  <i class="ri-check-line text-white hidden"></i>
-                </div>
+            <form id="loginForm">
+              <div class="mb-4">
                 <label
-                  for="remember"
-                  class="text-sm text-gray-700 cursor-pointer"
-                  >Se souvenir de moi</label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-button bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  placeholder="votre@email.com"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label
+                  for="password"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Mot de passe</label
+                >
+                <input
+                  type="password"
+                  id="password"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-button bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <div class="flex items-center justify-between mb-6">
+                <label
+                  class="flex items-center cursor-pointer text-sm text-gray-700 dark:text-gray-300"
+                >
+                  <input type="checkbox" class="mr-2 accent-primary" />
+                  Se souvenir de moi
+                </label>
+                <a href="#" class="text-sm text-primary hover:underline"
+                  >Mot de passe oublié ?</a
                 >
               </div>
-              <a href="#" class="text-sm text-primary hover:underline"
-                >Mot de passe oublié ?</a
+              <button
+                type="submit"
+                class="w-full bg-primary text-white py-2 rounded-button hover:bg-opacity-90 transition-colors"
               >
-            </div>
-            <button
-              type="submit"
-              class="w-full bg-primary text-white py-2 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap"
-            >
-              Se connecter
-            </button>
-          </form>
-          <div class="mt-6 text-center">
-            <div class="relative flex items-center justify-center">
-              <div class="border-t border-gray-300 absolute w-full"></div>
-              <span class="bg-white px-2 text-sm text-gray-500 relative"
-                >ou</span
-              >
-            </div>
-            <p class="mt-4 text-sm text-gray-600">
-              Pas encore de compte ?
-              <a href="#" class="text-primary hover:underline" id="goToSignup"
-                >S'inscrire</a
-              >
-            </p>
+                Se connecter
+              </button>
+            </form>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
       <!-- Signup Page -->
       <section
         id="signupPage"
-        class="hidden pt-24 min-h-screen flex items-center justify-center bg-gray-50"
+        class="hidden pt-24 min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900"
       >
-    
-<div class="container mx-auto px-4 py-16">
-  <div class="max-w-md mx-auto bg-white !rounded-lg shadow-lg p-8">
-    <div class="text-center mb-8">
-      <h1 class="text-2xl font-['Pacifico'] text-primary mb-2">RemN</h1>
-      <h2 class="text-2xl font-bold text-gray-900">Créer un compte</h2>
-    </div>
-    <form id="signupForm">
-      <div class="mb-4">
-        <label
-          for="username"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Nom d'utilisateur</label
-        >
-        <input
-          type="text"
-          id="username"
-          class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-          placeholder="JohnDoe"
-          required
-        />
-      </div>
-      <div class="mb-4">
-        <label
-          for="signupEmail"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Email</label
-        >
-        <input
-          type="email"
-          id="signupEmail"
-          class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-          placeholder="votre@email.com"
-          required
-        />
-      </div>
-      <div class="mb-4">
-        <label
-          for="signupPassword"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Mot de passe</label
-        >
-        <input
-          type="password"
-          id="signupPassword"
-          class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-          placeholder="••••••••"
-          required
-        />
-      </div>
-      <div class="mb-6">
-        <label
-          for="confirmPassword"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Confirmer le mot de passe</label
-        >
-        <input
-          type="password"
-          id="confirmPassword"
-          class="w-full px-3 py-2 border border-gray-300 !rounded-button text-gray-900"
-          placeholder="••••••••"
-          required
-        />
-      </div>
-      <div class="flex items-center mb-6">
-        <input type="checkbox" id="terms" class="hidden" required />
-        <div
-          class="w-5 h-5 border border-gray-300 !rounded-sm mr-2 flex items-center justify-center cursor-pointer"
-          id="termsCheckbox"
-        >
-          <i class="ri-check-line text-white hidden"></i>
+        <div id="tsparticles-bg2" class="absolute inset-0 z-0"></div>
+        <div class="container mx-auto px-4 py-16 relative">
+          <div
+            class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8"
+          >
+            <div class="text-center mb-8">
+              <h1 class="text-2xl font-['Pacifico'] text-primary mb-2">
+                RemNote
+              </h1>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Créer un compte
+              </h2>
+            </div>
+            <form id="signupForm">
+              <div class="mb-4">
+                <label
+                  for="username"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Nom d'utilisateur</label
+                >
+                <input
+                  type="text"
+                  id="username"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-button bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  placeholder="JohnDoe"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="signupEmail"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  id="signupEmail"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-button bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  placeholder="votre@email.com"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="signupPassword"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Mot de passe</label
+                >
+                <input
+                  type="password"
+                  id="signupPassword"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-button bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label
+                  for="confirmPassword"
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                  >Confirmer le mot de passe</label
+                >
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-button bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-primary text-white py-2 rounded-button hover:bg-opacity-90 transition-colors"
+              >
+                S'inscrire
+              </button>
+            </form>
+          </div>
         </div>
-        <label for="terms" class="text-sm text-gray-700 cursor-pointer"
-          >J'accepte les
-          <a href="#" class="text-primary hover:underline"
-            >conditions d'utilisation</a
-          ></label
-        >
-      </div>
-      <button
-        type="submit"
-        class="w-full bg-primary text-white py-2 !rounded-button hover:bg-opacity-90 transition-colors whitespace-nowrap"
-      >
-        S'inscrire
-      </button>
-    </form>
-    <div class="mt-6 text-center">
-      <div class="relative flex items-center justify-center">
-        <div class="border-t border-gray-300 absolute w-full"></div>
-        <span class="bg-white px-2 text-sm text-gray-500 relative"
-          >ou</span
-        >
-      </div>
-      <p class="mt-4 text-sm text-gray-600">
-        Déjà un compte ?
-        <a href="#" class="text-primary hover:underline" id="goToLogin"
-          >Se connecter</a
-        >
-      </p>
-    </div>
-  </div>
-</div>;
-    </section>
+      </section>
     </main>
 
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.VANTA && document.querySelector("#hero-bg")) {
+          window.VANTA.HALO({
+            el: "#hero-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 100.0,
+            minWidth: 100.0,
+            xOffset: 0.25,
+            size: 1.5,
+          });
+        }
+      });
+    </script>
+    <script>
+      tsParticles.load("tsparticles-bg1", {
+        fullScreen: { enable: false },
+        background: {
+          color: { value: "transparent" }
+        },
+        particles: {
+          number: { value: 50 },
+          color: { value: "#4F46E5" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5 },
+          size: { value: 3 },
+          move: { enable: true, speed: 1 },
+          links: {
+            enable: true,
+            color: "#4F46E5",
+            opacity: 0.4
+          }
+        }
+      });
+    </script>
+        <script>
+          tsParticles.load("tsparticles-bg2", {
+            fullScreen: { enable: false },
+            background: {
+              color: { value: "transparent" }
+            },
+            particles: {
+              number: { value: 50 },
+              color: { value: "#4F46E5" },
+              shape: { type: "circle" },
+              opacity: { value: 0.5 },
+              size: { value: 3 },
+              move: { enable: true, speed: 1 },
+              links: {
+                enable: true,
+                color: "#4F46E5",
+                opacity: 0.4
+              }
+            }
+          });
+        </script>
+    <script type="module" src="js/cardAnimation.js"></script>
     <script type="module" src="js/formValidation.js"></script>
     <script type="module" src="js/navigation.js"></script>
     <script type="module" src="js/themeToggle.js"></script>
