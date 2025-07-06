@@ -19,5 +19,5 @@ Cette application web permet de prendre des notes rapidement et efficacement.
 
 ## 👥 Équipe
 
-- Mickael STD 24224  
-- Issa Ben Said STD
+- Mickael STD24224  
+- Issa Ben Said STD24198
