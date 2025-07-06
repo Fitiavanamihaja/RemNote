@@ -279,6 +279,15 @@ function createNewNote() {
         : "Créée maintenant";
     }
     updateMarkdownPreview();
+    if (elements.notesContainer) elements.notesContainer.classList.add("hidden");
+    if (elements.editorContainer) {
+      elements.editorContainer.classList.remove("hidden");
+      elements.editorContainer.classList.add("flex");
+    }
+    if (elements.viewContainer) {
+      elements.viewContainer.classList.add("hidden");
+      elements.viewContainer.classList.remove("flex");
+    }
     if (elements.noteTitle) elements.noteTitle.focus();
     renderNotes();
     renderTags();
@@ -538,7 +547,17 @@ if (elements.newNoteBtn) elements.newNoteBtn.addEventListener("click", () => {
     }
 });
 if (elements.hiddeView) elements.hiddeView.addEventListener("click", goToNotesList);
-if (elements.emptyNewNoteBtn) elements.emptyNewNoteBtn.addEventListener("click", createNewNote);
+if (elements.emptyNewNoteBtn) elements.emptyNewNoteBtn.addEventListener("click", () => {
+  if (elements.notesContainer) elements.notesContainer.classList.add("hidden");
+    if (elements.editorContainer) {
+      elements.editorContainer.classList.remove("hidden");
+      elements.editorContainer.classList.add("flex");
+    }
+    if (elements.viewContainer) {
+      elements.viewContainer.classList.add("hidden");
+      elements.viewContainer.classList.remove("flex");
+    }
+});
 if (elements.saveNoteBtn) elements.saveNoteBtn.addEventListener("click", saveCurrentNote);
 if (elements.cancelEditBtn) elements.cancelEditBtn.addEventListener("click", goToNotesList);
 if (elements.editNoteBtn) {
