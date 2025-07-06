@@ -226,13 +226,13 @@ input[type=number] {
 
 /* Editor and view containers */
 #editor-container, #view-container {
-    max-width: 100%;
+    width: 100%;
     padding: 1rem;
 }
 
 @media (min-width: 768px) {
     #editor-container, #view-container {
-        max-width: 48rem;
+        width: 95%;
         margin: 0 auto;
     }
 }

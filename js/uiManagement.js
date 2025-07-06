@@ -13,6 +13,7 @@ const elements = {
   emptyState: document.getElementById("empty-state"),
   editorContainer: document.getElementById("editor-container"),
   viewContainer: document.getElementById("view-container"),
+  hiddeView: document.getElementById("hidde-view"),
   noteTitle: document.getElementById("note-title"),
   noteContent: document.getElementById("note-content"),
   noteTagsInput: document.getElementById("note-tags"),
@@ -278,15 +279,6 @@ function createNewNote() {
         : "Créée maintenant";
     }
     updateMarkdownPreview();
-    if (elements.notesContainer) elements.notesContainer.classList.add("hidden");
-    if (elements.editorContainer) {
-      elements.editorContainer.classList.remove("hidden");
-      elements.editorContainer.classList.add("flex");
-    }
-    if (elements.viewContainer) {
-      elements.viewContainer.classList.add("hidden");
-      elements.viewContainer.classList.remove("flex");
-    }
     if (elements.noteTitle) elements.noteTitle.focus();
     renderNotes();
     renderTags();
@@ -534,7 +526,18 @@ function formatText(type) {
 }
 
 // Event Listeners
-if (elements.newNoteBtn) elements.newNoteBtn.addEventListener("click", createNewNote);
+if (elements.newNoteBtn) elements.newNoteBtn.addEventListener("click", () => {
+  if (elements.notesContainer) elements.notesContainer.classList.add("hidden");
+    if (elements.editorContainer) {
+      elements.editorContainer.classList.remove("hidden");
+      elements.editorContainer.classList.add("flex");
+    }
+    if (elements.viewContainer) {
+      elements.viewContainer.classList.add("hidden");
+      elements.viewContainer.classList.remove("flex");
+    }
+});
+if (elements.hiddeView) elements.hiddeView.addEventListener("click", goToNotesList);
 if (elements.emptyNewNoteBtn) elements.emptyNewNoteBtn.addEventListener("click", createNewNote);
 if (elements.saveNoteBtn) elements.saveNoteBtn.addEventListener("click", saveCurrentNote);
 if (elements.cancelEditBtn) elements.cancelEditBtn.addEventListener("click", goToNotesList);
